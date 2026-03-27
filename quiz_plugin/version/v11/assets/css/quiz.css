@@ -55,7 +55,7 @@
     border: 1px solid #ddd;
     border-radius: 8px;
     background: #fff;
-    color: #333 !important;
+    color: #333;
     cursor: pointer;
     transition: all 0.25s ease;
     position: relative;
@@ -71,7 +71,7 @@
 .wzq-option.correct {
     background: #e6f4ea;
     border-color: #28a745;
-    color: #1e7e34 !important;
+    color: #1e7e34;
     font-weight: 600;
 }
 
@@ -79,7 +79,7 @@
 .wzq-option.wrong {
     background: #fdecea;
     border-color: #dc3545;
-    color: #a71d2a !important;
+    color: #a71d2a;
     font-weight: 500;
 }
 
@@ -209,14 +209,6 @@
     padding: 0 5px;
 }
 
-.wzq-nav button {
-    padding: 10px 20px;
-    font-size: 14px;
-    border-radius: 6px;
-    min-width: 100px;
-    text-align: center;
-}
-
 .wzq-prev,
 .wzq-next {
     padding: 10px 20px;
@@ -226,26 +218,20 @@
     cursor: pointer;
 }
 
-/* disabled style */
+.wzq-prev {
+    background: #ddd;
+    color: #333;
+}
+
 .wzq-prev:disabled {
     background: #ccc;
     color: #777;
     cursor: not-allowed;
 }
 
-.wzq-prev {
-    background: #ddd;
-    color: #333;
-}
-
 .wzq-next {
     background: #333;
     color: #fff;
-}
-
-.wzq-prev:disabled {
-    background: #ccc;
-    color: #777;
 }
 
 .wzq-result {

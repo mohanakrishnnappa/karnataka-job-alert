@@ -194,5 +194,11 @@ document.addEventListener("click", function (e) {
 
 // 🚀 INITIAL LOAD
 document.addEventListener("DOMContentLoaded", function () {
+
+    if (warningBox) {
+        warningBox.classList.remove("show");
+        warningBox.style.display = "none";
+    }
+
     showQuestion(0);
 });
