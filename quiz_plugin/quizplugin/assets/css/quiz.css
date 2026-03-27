@@ -67,6 +67,10 @@
     background: #f5f9ff;
 }
 
+.wzq-question:not(.answered) .wzq-option.correct:hover {
+    background: #e6f4ea;
+}
+
 /* Correct */
 .wzq-option.correct {
     opacity: 1 !important;
