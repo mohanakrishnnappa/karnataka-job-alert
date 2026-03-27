@@ -170,12 +170,14 @@ function wzq_builder_ui($post) {
     padding: 20px 25px;
     border-radius: 10px;
     text-align: center;
-    width: 300px;
+    width: 420px;
+    max-width: 90%;
     animation: fadeIn 0.2s ease;
 }
 
 .wzq-modal-actions {
     margin-top: 15px;
+    gap: 10px;
     display: flex;
     justify-content: space-between;
 }
@@ -185,6 +187,15 @@ function wzq_builder_ui($post) {
     border-radius: 6px;
     cursor: pointer;
     border: none;
+    flex: 1;
+    padding: 10px;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.wzq-modal-box p {
+    font-size: 16px;
+    margin-bottom: 20px;
 }
 
 #wzq-confirm-yes {
