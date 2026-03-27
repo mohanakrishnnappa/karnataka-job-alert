@@ -168,8 +168,11 @@ function wzq_builder_ui($post) {
 
             <div class="wzq-question-box">
 
-                <p><strong>Question</strong></p>
-                <textarea name="questions[<?php echo $i; ?>][question]" style="width:100%"><?php echo esc_textarea($q->question); ?></textarea>
+                <p><strong>Question <?php echo str_pad($i+1, 2, '0', STR_PAD_LEFT); ?>:</strong></p>
+
+                <textarea name="questions[<?php echo $i; ?>][question]" style="width:100%">
+                    <?php echo esc_textarea($q->question); ?>
+                </textarea>
 
                 <p>Options</p>
                 <div class="wzq-options-grid">
@@ -188,9 +191,11 @@ function wzq_builder_ui($post) {
                 </select>
 
                 <p>Explanation</p>
-                <textarea name="questions[<?php echo $i; ?>][explanation]" style="width:100%"><?php echo esc_textarea($q->explanation); ?></textarea>
+                <textarea name="questions[<?php echo $i; ?>][explanation]" style="width:100%">
+                    <?php echo esc_textarea($q->explanation); ?>
+                </textarea>
 
-                <button type="button" onclick="this.parentElement.remove()">❌ Remove</button>
+                <button type="button" onclick="wzqRemoveQuestion(this)">❌ Remove</button>
 
                 <hr>
 
@@ -270,7 +275,7 @@ function wzqAddQuestion(){
 
     let html = `
     <div class="wzq-question-box">
-        <p><strong>Question</strong></p>
+        <p><strong>Question ${String(index+1).padStart(2,'0')}:</strong></p>
         <textarea name="questions[`+index+`][question]" style="width:100%"></textarea>
 
         <p>Options</p>
@@ -292,7 +297,7 @@ function wzqAddQuestion(){
         <p>Explanation</p>
         <textarea name="questions[`+index+`][explanation]" style="width:100%"></textarea>
 
-        <button type="button" onclick="this.parentElement.remove()">❌ Remove</button>
+        <button type="button" onclick="wzqRemoveQuestion(this)">❌ Remove</button>
     </div>
     `;
 
@@ -337,7 +342,7 @@ function wzqImportJSON() {
         let html = `
         <div class="wzq-question-box">
 
-            <p><strong>Question</strong></p>
+            <p><strong>Question ${String(index+1).padStart(2,'0')}:</strong></p>
             <textarea name="questions[`+index+`][question]">${q.question}</textarea>
 
             <p>Options</p>
@@ -359,7 +364,7 @@ function wzqImportJSON() {
             <p>Explanation</p>
             <textarea name="questions[`+index+`][explanation]">${q.explanation || ''}</textarea>
 
-            <button type="button" onclick="this.parentElement.remove()">❌ Remove</button>
+            <button type="button" onclick="wzqRemoveQuestion(this)">❌ Remove</button>
 
             <hr>
 
@@ -373,7 +378,30 @@ function wzqImportJSON() {
     const manualBtn = document.querySelector('.wzq-tabs button');
     wzqShowTab('manual', manualBtn);
 
+    textarea.value = '';
+
     alert("Imported successfully ✅");
+}
+
+function wzqRemoveQuestion(btn){
+    const box = btn.closest('.wzq-question-box');
+    box.remove();
+
+    // 🔥 RE-INDEX ALL QUESTIONS
+    document.querySelectorAll('#wzq-questions .wzq-question-box').forEach((box, i) => {
+
+        // Update title
+        const title = box.querySelector('strong');
+        if(title){
+            title.innerText = "Question " + String(i+1).padStart(2,'0') + ":";
+        }
+
+        // Update all name attributes
+        box.querySelectorAll('textarea, input, select').forEach(el => {
+            el.name = el.name.replace(/questions\[\d+\]/, 'questions['+i+']');
+        });
+
+    });
 }
 
 // Export Questions as JSON
@@ -439,16 +467,13 @@ add_action('save_post', function($post_id){
         return;
     }
 
-    if (empty($_POST['questions']) && empty($_POST['wzq_json'])) {
-        return;
-    }
+    $has_questions = !empty($_POST['questions']) || !empty($_POST['wzq_json']);
 
     global $wpdb;
 
     $quiz_table = $wpdb->prefix.'wz_quizzes';
     $question_table = $wpdb->prefix.'wz_questions';
 
-    // delete old
     $old_quiz = $wpdb->get_row(
         $wpdb->prepare("SELECT * FROM $quiz_table WHERE post_id = %d", $post_id)
     );
@@ -456,6 +481,10 @@ add_action('save_post', function($post_id){
     if($old_quiz){
         $wpdb->delete($question_table, ['quiz_id' => $old_quiz->id]);
         $wpdb->delete($quiz_table, ['id' => $old_quiz->id]);
+    }
+
+    if(!$has_questions){
+        return;
     }
 
     $settings = $_POST['wzq_settings'] ?? [];
@@ -469,8 +498,9 @@ add_action('save_post', function($post_id){
 
     $quiz_id = $wpdb->insert_id;
 
-    // JSON
+    // ✅ PRIORITY: JSON (if exists, ignore manual)
     if(!empty($_POST['wzq_json'])){
+
         $data = json_decode(stripslashes($_POST['wzq_json']), true);
 
         if(!empty($data['questions'])){
@@ -488,10 +518,10 @@ add_action('save_post', function($post_id){
                 ]);
             }
         }
-    }
 
-    // manual
-    if(!empty($_POST['questions'])){
+    } elseif(!empty($_POST['questions'])) {
+
+        // ✅ ONLY run manual if JSON is empty
         foreach($_POST['questions'] as $i => $q){
             $wpdb->insert($question_table, [
                 'quiz_id' => $quiz_id,
