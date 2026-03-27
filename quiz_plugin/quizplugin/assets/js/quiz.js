@@ -147,7 +147,25 @@ nextBtn.addEventListener("click", () => {
             container.prepend(reviewScore);
         }
 
-        reviewScore.innerText = `Your Score: ${score} / ${total}`;
+        const percent = Math.round((score / total) * 100);
+
+        let remark = "Needs Improvement ❗";
+        if (percent >= 80) remark = "Excellent 🎉";
+        else if (percent >= 60) remark = "Good Job 👍";
+        else if (percent >= 40) remark = "Keep Practicing 💪";
+
+        reviewScore.innerHTML = `
+            <div class="wzq-score-top">
+                <div class="wzq-score-text">${score} / ${total}</div>
+                <div class="wzq-score-percent">${percent}%</div>
+            </div>
+
+            <div class="wzq-score-bar">
+                <div class="wzq-score-fill" style="width:${percent}%"></div>
+            </div>
+
+            <div class="wzq-score-remark">${remark}</div>
+        `;
 
         // ✅ ADD RESTART BUTTON AT BOTTOM
         let restartBtn = document.querySelector(".wzq-review-restart");
@@ -213,46 +231,12 @@ document.querySelectorAll(".wzq-option").forEach(btn => {
 
 // 👉 GLOBAL CLICK HANDLERS
 document.addEventListener("click", function (e) {
-
-    // close warning
     if (e.target.classList.contains("wzq-warning-close")) {
         warningBox.classList.remove("show");
         warningBox.style.display = "none";
     }
-
-    // restart
     if (e.target.classList.contains("wzq-restart")) {
         location.reload();
-    }
-
-    // 🎯 REVIEW MODE
-    if (e.target.classList.contains("wzq-review")) {
-
-        resultBox.style.display = "none";
-
-        const card = document.querySelector(".wzq-card");
-        card.style.display = "block";
-
-        wrapper.classList.add("wzq-review-mode");
-
-        // ✅ CREATE SCORE BAR (NEW)
-        let reviewScore = document.querySelector(".wzq-review-score");
-
-        if (!reviewScore) {
-            reviewScore = document.createElement("div");
-            reviewScore.className = "wzq-review-score";
-            card.prepend(reviewScore); // 🔥 add at top
-        }
-
-        reviewScore.innerText = `Your Score: ${score} / ${total}`;
-
-        // show all questions
-        questions.forEach(q => {
-            q.classList.add("active");
-
-            const exp = q.querySelector(".wzq-explanation");
-            if (exp) exp.style.display = "block";
-        });
     }
 });
 

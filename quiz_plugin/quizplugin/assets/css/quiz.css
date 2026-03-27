@@ -313,14 +313,58 @@
     border-bottom: none;
 }
 
-/* 🎯 REVIEW SCORE BAR */
+/* 🎯 CLEAN SCORE BAR */
 .wzq-review-score {
-    background: linear-gradient(135deg, #007bff, #0056b3);
-    color: #fff;
-    padding: 15px;
+    background: #f5f7fa;
+    border: 1px solid #e3e6ea;
+    padding: 16px;
     border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+/* Top row */
+.wzq-score-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.wzq-score-text {
     font-size: 18px;
     font-weight: 600;
-    text-align: center;
-    margin-bottom: 20px;
+    color: #1d2327;
+}
+
+.wzq-score-percent {
+    font-size: 14px;
+    color: #6c7781;
+}
+
+/* Progress bar */
+.wzq-score-bar {
+    width: 100%;
+    height: 6px;
+    background: #e5e7eb;
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 6px 0;
+}
+
+.wzq-score-fill {
+    height: 100%;
+    background: #4caf50;
+    border-radius: 4px;
+}
+
+/* Remark */
+.wzq-score-remark {
+    font-size: 13px;
+    color: #6c7781;
+    margin-top: 6px;
+}
+
+.wzq-review-restart {
+    display: block;
+    margin: 30px auto 10px;
 }
