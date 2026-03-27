@@ -124,8 +124,9 @@ function wzq_builder_ui($post) {
 
 /* Remove Button */
 .wzq-question-box button {
-    background: #dc3545;
-    color: #fff;
+    background: white;
+    border: 1px solid #dc3545 !important;
+    color: #dc3545;
     border: none;
     padding: 6px 12px;
     border-radius: 6px;
@@ -134,7 +135,7 @@ function wzq_builder_ui($post) {
 }
 
 .wzq-question-box button:hover {
-    background: #c82333;
+    border: 1px solid #c82333;
 }
 
 /* Add Question Button */
@@ -417,19 +418,22 @@ function wzqImportJSON() {
 }
 
 function wzqRemoveQuestion(btn){
+
+    if(!confirm("Are you sure you want to delete this question?")) {
+        return; // ❌ Stop if user clicks Cancel
+    }
+
     const box = btn.closest('.wzq-question-box');
     box.remove();
 
     // 🔥 RE-INDEX ALL QUESTIONS
     document.querySelectorAll('#wzq-questions .wzq-question-box').forEach((box, i) => {
 
-        // Update title
         const title = box.querySelector('strong');
         if(title){
             title.innerText = "Question " + String(i+1).padStart(2,'0') + ":";
         }
 
-        // Update all name attributes
         box.querySelectorAll('textarea, input, select').forEach(el => {
             el.name = el.name.replace(/questions\[\d+\]/, 'questions['+i+']');
         });
