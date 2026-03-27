@@ -1,0 +1,17 @@
+.wzq-container {
+    max-width: 600px;
+    margin: auto;
+}
+
+.wzq-option {
+    display: block;
+    margin: 10px 0;
+    padding: 10px;
+    cursor: pointer;
+}
+
+.wzq-explanation {
+    display: none;
+    background: #f5f5f5;
+    padding: 10px;
+}
