@@ -142,6 +142,7 @@ function wzq_builder_ui($post) {
 .button.button-primary {
     border-radius: 6px;
     padding: 8px 16px;
+    border: none !important;
 }
 
 /* JSON Box */
@@ -254,8 +255,6 @@ function wzq_builder_ui($post) {
                 <textarea name="questions[<?php echo $i; ?>][explanation]" style="width:100%"><?php echo esc_textarea($q->explanation); ?></textarea>
 
                 <button type="button" onclick="wzqRemoveQuestion(this)">❌ Remove</button>
-
-                <hr>
 
             </div>
 
@@ -599,7 +598,20 @@ add_action('save_post', function($post_id){
         return;
     }
 
-    $has_questions = !empty($_POST['questions']) || !empty($_POST['wzq_json']);
+    $has_questions = false;
+
+    if(!empty($_POST['questions'])){
+        foreach($_POST['questions'] as $q){
+            if(!empty(trim($q['question'] ?? ''))){
+                $has_questions = true;
+                break;
+            }
+        }
+    }
+
+    if(!empty($_POST['wzq_json'])){
+        $has_questions = true;
+    }
 
     global $wpdb;
 
@@ -661,15 +673,44 @@ add_action('save_post', function($post_id){
 
         // ✅ ONLY run manual if JSON is empty
         foreach($_POST['questions'] as $i => $q){
+
+            $question = trim($q['question'] ?? '');
+            $a = trim($q['a'] ?? '');
+            $b = trim($q['b'] ?? '');
+            $c = trim($q['c'] ?? '');
+            $d = trim($q['d'] ?? '');
+
+            // ❌ Skip if completely empty
+            if(
+                $question === '' &&
+                $a === '' &&
+                $b === '' &&
+                $c === '' &&
+                $d === ''
+            ){
+                continue;
+            }
+
+            // ❌ Optional: Skip if question OR options incomplete
+            if(
+                $question === '' ||
+                $a === '' ||
+                $b === '' ||
+                $c === '' ||
+                $d === ''
+            ){
+                continue;
+            }
+
             $wpdb->insert($question_table, [
                 'quiz_id' => $quiz_id,
-                'question' => trim(sanitize_textarea_field($q['question'])),
-                'option_a' => sanitize_text_field($q['a']),
-                'option_b' => sanitize_text_field($q['b']),
-                'option_c' => sanitize_text_field($q['c']),
-                'option_d' => sanitize_text_field($q['d']),
+                'question' => sanitize_textarea_field($question),
+                'option_a' => sanitize_text_field($a),
+                'option_b' => sanitize_text_field($b),
+                'option_c' => sanitize_text_field($c),
+                'option_d' => sanitize_text_field($d),
                 'correct' => sanitize_text_field($q['correct']),
-                'explanation' => trim(sanitize_textarea_field($q['explanation'])),
+                'explanation' => trim(sanitize_textarea_field($q['explanation'] ?? '')),
                 'order_index' => $i
             ]);
         }
