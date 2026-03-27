@@ -1,0 +1,14 @@
+quizplugin/
+│
+├── webzeeto-quiz.php
+├── includes/
+│   ├── db.php
+│   ├── cpt.php
+│   ├── admin.php
+│   ├── shortcode.php
+│
+├── assets/
+│   ├── js/
+│   │   └── quiz.js
+│   ├── css/
+│   │   └── quiz.css
