@@ -251,13 +251,8 @@ function submitQuiz(forceSubmit = false) {
     const percent = Math.round((score / total) * 100);
 
     // ⏱ TIME CALCULATION
-    let seconds = Math.floor((endTime - startTime) / 1000);
-    let minutes = Math.floor(seconds / 60);
-    seconds = seconds % 60;
-
-    let timeTaken =
-        String(minutes).padStart(2, '0') + ":" +
-        String(seconds).padStart(2, '0');
+    let totalSeconds = Math.floor((endTime - startTime) / 1000);
+    let timeTaken = formatTime(totalSeconds);
 
     reviewScore.innerHTML = `
         <div class="wzq-score-top">
@@ -281,6 +276,14 @@ function submitQuiz(forceSubmit = false) {
 
         container.appendChild(restartBtn);
     }
+}
+
+function formatTime(sec) {
+    let h = Math.floor(sec / 3600);
+    let m = Math.floor((sec % 3600) / 60);
+    let s = sec % 60;
+
+    return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
 }
 
 // 👉 NEXT BUTTON
@@ -370,12 +373,7 @@ document.addEventListener("DOMContentLoaded", function () {
         let remaining = timerValue;
 
         function updateTimer() {
-            let minutes = Math.floor(remaining / 60);
-            let seconds = remaining % 60;
-
-            timerText.innerText =
-                String(minutes).padStart(2, '0') + ":" +
-                String(seconds).padStart(2, '0');
+            timerText.innerText = formatTime(remaining);
 
             if (remaining <= 0) {
                 clearInterval(timerInterval);
