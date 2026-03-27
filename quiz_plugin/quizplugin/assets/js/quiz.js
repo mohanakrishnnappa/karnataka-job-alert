@@ -10,6 +10,9 @@ let current = 0;
 let score = 0;
 let timerInterval = null;
 
+let startTime = Date.now();
+let endTime = null;
+
 // wrapper
 const wrapper = document.querySelector(".wzq-wrapper");
 
@@ -134,112 +137,152 @@ function showReviewPage(page) {
     renderPagination();
 }
 
-// 👉 NEXT BUTTON
-nextBtn.addEventListener("click", () => {
+function submitQuiz(forceSubmit = false) {
 
     const remaining = getUnansweredCount();
 
+    // ❌ DO NOT STOP TIMER YET
+
+    // ❌ SHOW WARNING (if not forced)
+    if (!forceSubmit && remaining > 0) {
+
+        warningText.innerText =
+            `You have ${remaining} unanswered question${remaining > 1 ? 's' : ''}`;
+
+        warningBox.classList.add("show");
+        warningBox.style.display = "flex";
+
+        const firstUnanswered = questions.findIndex(q => !q.classList.contains("answered"));
+        if (firstUnanswered !== -1) {
+            current = firstUnanswered;
+            showQuestion(current);
+        }
+
+        return; // 🚨 STOP HERE (timer continues)
+    }
+
+    if (timerInterval) clearInterval(timerInterval);
+
+    if (!endTime) endTime = Date.now();
+
+    // ❌ ONLY SHOW WARNING IF NOT FORCE
+    if (!forceSubmit && remaining > 0) {
+
+        warningText.innerText =
+            `You have ${remaining} unanswered question${remaining > 1 ? 's' : ''}`;
+
+        warningBox.classList.add("show");
+        warningBox.style.display = "flex";
+
+        const firstUnanswered = questions.findIndex(q => !q.classList.contains("answered"));
+        if (firstUnanswered !== -1) {
+            current = firstUnanswered;
+            showQuestion(current);
+        }
+
+        return;
+    }
+
+    // ✅ ENTER REVIEW MODE
+    wrapper.classList.add("wzq-review-mode");
+
+    warningBox.classList.remove("show");
+    warningBox.style.display = "none";
+
+    // 🎯 HANDLE UNANSWERED QUESTIONS
+    questions.forEach(q => {
+
+        const exp = q.querySelector(".wzq-explanation");
+        if (exp) exp.style.display = "block";
+
+        if (!q.classList.contains("answered")) {
+
+            q.classList.add("unanswered");
+
+            const correct = q.querySelector(".wzq-option").dataset.correct;
+
+            q.querySelectorAll(".wzq-option").forEach(opt => {
+
+                opt.disabled = true;
+
+                if (opt.dataset.opt === correct) {
+                    opt.classList.add("correct");
+                }
+            });
+
+            // add label
+            let tag = document.createElement("div");
+            tag.className = "wzq-unanswered-label";
+            tag.innerText = "Not Answered";
+
+            q.appendChild(tag);
+        }
+    });
+
+    // 🎯 PAGINATION
+    if (total > 5) {
+        reviewPage = 0;
+        totalPages = Math.ceil(total / perPage);
+        showReviewPage(reviewPage);
+    } else {
+        questions.forEach(q => q.style.display = "block");
+    }
+
+    // 🎯 SCORE + TIME
+    let reviewScore = document.querySelector(".wzq-review-score");
+
+    if (!reviewScore) {
+        reviewScore = document.createElement("div");
+        reviewScore.className = "wzq-review-score";
+        container.prepend(reviewScore);
+    }
+
+    const percent = Math.round((score / total) * 100);
+
+    // ⏱ TIME CALCULATION
+    let seconds = Math.floor((endTime - startTime) / 1000);
+    let minutes = Math.floor(seconds / 60);
+    seconds = seconds % 60;
+
+    let timeTaken =
+        String(minutes).padStart(2, '0') + ":" +
+        String(seconds).padStart(2, '0');
+
+    reviewScore.innerHTML = `
+        <div class="wzq-score-top">
+            <div class="wzq-score-text">${score} / ${total}</div>
+            <div class="wzq-score-percent">${percent}%</div>
+        </div>
+
+        <div class="wzq-score-bar">
+            <div class="wzq-score-fill" style="width:${percent}%"></div>
+        </div>
+
+        <div class="wzq-score-time">⏱ Time Taken: ${timeTaken}</div>
+    `;
+
+    let restartBtn = document.querySelector(".wzq-review-restart");
+
+    if (!restartBtn) {
+        restartBtn = document.createElement("button");
+        restartBtn.className = "wzq-restart wzq-review-restart";
+        restartBtn.innerText = "Restart Quiz";
+
+        container.appendChild(restartBtn);
+    }
+}
+
+// 👉 NEXT BUTTON
+nextBtn.addEventListener("click", () => {
+
     // 👉 LAST QUESTION = SUBMIT
     if (current === total - 1) {
-
-        if (timerInterval) clearInterval(timerInterval);
-
-        if (remaining > 0) {
-
-            // set text
-            warningText.innerText =
-                `You have ${remaining} unanswered question${remaining > 1 ? 's' : ''}`;
-
-            // show
-            warningBox.classList.add("show");
-            warningBox.style.display = "flex";
-
-            // scroll to warning
-            warningBox.scrollIntoView({ behavior: "smooth", block: "start" });
-
-            const firstUnanswered = questions.findIndex(q => !q.classList.contains("answered"));
-            if (firstUnanswered !== -1) {
-                current = firstUnanswered;
-                showQuestion(current);
-            }
-
-            return;
-        }
-
-        // ✅ submit
-        // ✅ DIRECT REVIEW MODE (skip result screen)
-
-        wrapper.classList.add("wzq-review-mode");
-
-        // hide warning just in case
-        warningBox.classList.remove("show");
-        warningBox.style.display = "none";
-
-        // show explanations for all
-        questions.forEach(q => {
-            const exp = q.querySelector(".wzq-explanation");
-            if (exp) exp.style.display = "block";
-        });
-
-        // 🎯 PAGINATION LOGIC
-        if (total > 5) {
-
-            reviewPage = 0;
-            totalPages = Math.ceil(total / perPage);
-
-            showReviewPage(reviewPage);
-
-        } else {
-            // show all if <=5
-            questions.forEach(q => {
-                q.style.display = "block";
-            });
-        }
-
-        // ✅ CREATE SCORE BAR
-        let reviewScore = document.querySelector(".wzq-review-score");
-
-        if (!reviewScore) {
-            reviewScore = document.createElement("div");
-            reviewScore.className = "wzq-review-score";
-            container.prepend(reviewScore);
-        }
-
-        const percent = Math.round((score / total) * 100);
-
-        let remark = "Needs Improvement ❗";
-        if (percent >= 80) remark = "Excellent 🎉";
-        else if (percent >= 60) remark = "Good Job 👍";
-        else if (percent >= 40) remark = "Keep Practicing 💪";
-
-        reviewScore.innerHTML = `
-            <div class="wzq-score-top">
-                <div class="wzq-score-text">${score} / ${total}</div>
-                <div class="wzq-score-percent">${percent}%</div>
-            </div>
-
-            <div class="wzq-score-bar">
-                <div class="wzq-score-fill" style="width:${percent}%"></div>
-            </div>
-
-            <div class="wzq-score-remark">${remark}</div>
-        `;
-
-        // ✅ ADD RESTART BUTTON AT BOTTOM
-        let restartBtn = document.querySelector(".wzq-review-restart");
-
-        if (!restartBtn) {
-            restartBtn = document.createElement("button");
-            restartBtn.className = "wzq-restart wzq-review-restart";
-            restartBtn.innerText = "Restart Quiz";
-
-            container.appendChild(restartBtn);
-        }
-
+        submitQuiz(false);
     } else {
         current++;
         showQuestion(current);
     }
+
 });
 
 // 👉 PREVIOUS BUTTON
@@ -326,8 +369,9 @@ document.addEventListener("DOMContentLoaded", function () {
             if (remaining <= 0) {
                 clearInterval(timerInterval);
 
-                // ⛔ AUTO SUBMIT
-                nextBtn.click();
+                endTime = Date.now();
+
+                submitQuiz(true);
                 return;
             }
 
