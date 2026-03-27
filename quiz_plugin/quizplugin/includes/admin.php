@@ -230,6 +230,18 @@ function wzq_builder_ui($post) {
         <p><strong>📢 Show Ad After (question no.)</strong></p>
         <input type="number" name="wzq_settings[ad_after]" 
             value="<?php echo $quiz->ad_after ?? 3; ?>">
+        
+        <hr>
+
+        <p><strong>📤 Export Questions</strong></p>
+        <button type="button" class="button button-primary" onclick="wzqExportJSON()">
+            ⬇️ Export as JSON
+        </button>
+
+        <p><strong>📋 Shortcode</strong></p>
+        <input type="text" readonly value="[wz_quiz id='<?php echo $post->ID; ?>']" 
+            style="width:100%;font-family:monospace;"
+            onclick="this.select();">
 
     </div>
 
@@ -361,6 +373,52 @@ function wzqImportJSON() {
     wzqShowTab('manual', manualBtn);
 
     alert("Imported successfully ✅");
+}
+
+// Export Questions as JSON
+function wzqExportJSON() {
+
+    const questions = [];
+
+    document.querySelectorAll('#wzq-questions .wzq-question-box').forEach(box => {
+
+        const qEl = box.querySelector('textarea[name*="[question]"]');
+        const aEl = box.querySelector('input[name*="[a]"]');
+        const bEl = box.querySelector('input[name*="[b]"]');
+        const cEl = box.querySelector('input[name*="[c]"]');
+        const dEl = box.querySelector('input[name*="[d]"]');
+        const correctEl = box.querySelector('select');
+        const expEl = box.querySelector('textarea[name*="[explanation]"]');
+
+        // Skip if invalid box (extra safety)
+        if (!qEl || !aEl || !bEl || !cEl || !dEl || !correctEl) return;
+
+        questions.push({
+            question: qEl.value,
+            options: {
+                a: aEl.value,
+                b: bEl.value,
+                c: cEl.value,
+                d: dEl.value
+            },
+            correct: correctEl.value,
+            explanation: expEl ? expEl.value : ""
+        });
+    });
+
+    const data = { questions };
+
+    const json = JSON.stringify(data, null, 2);
+
+    const blob = new Blob([json], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "quiz-" + Date.now() + ".json";
+    a.click();
+
+    URL.revokeObjectURL(url);
 }
 
 </script>
