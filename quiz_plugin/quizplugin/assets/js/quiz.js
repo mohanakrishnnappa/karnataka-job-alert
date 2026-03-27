@@ -211,11 +211,22 @@ function submitQuiz(forceSubmit = false) {
             });
 
             // add label
-            let tag = document.createElement("div");
+            let tag = document.createElement("span");
             tag.className = "wzq-unanswered-label";
             tag.innerText = "Not Answered";
 
-            q.appendChild(tag);
+            // 🎯 place near question title
+            let title = q.querySelector(".wzq-question-text");
+
+            if (title) {
+                let number = title.querySelector(".wzq-q-number");
+
+                if (number) {
+                    number.insertAdjacentElement("afterend", tag);
+                } else {
+                    title.appendChild(tag);
+                }
+            }
         }
     });
 
