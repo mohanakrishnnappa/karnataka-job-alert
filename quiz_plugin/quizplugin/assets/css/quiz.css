@@ -401,10 +401,6 @@
     font-weight: bold;
 }
 
-.wzq-page-btn:hover {
-    color: black;
-}
-
 .wzq-page-btn.active {
     background: #007cba;
     color: #fff;
@@ -413,6 +409,7 @@
 
 .wzq-page-btn:hover {
     background: #f0f7ff;
+    color: black;
 }
 
 /* Restart button */
