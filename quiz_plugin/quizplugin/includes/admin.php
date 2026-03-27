@@ -218,9 +218,46 @@ function wzq_builder_ui($post) {
 
     <div class="wzq-question-box">
 
-        <p><strong>⏱ Time Limit (seconds)</strong></p>
-        <input type="number" name="wzq_settings[time_limit]" 
-            value="<?php echo $quiz->time_limit ?? 300; ?>">
+        <p><strong>⏱ Time Limit</strong></p>
+
+        <?php
+        $total = $quiz->time_limit ?? 300;
+
+        $h = floor($total / 3600);
+        $m = floor(($total % 3600) / 60);
+        $s = $total % 60;
+        ?>
+
+        <div style="display:flex; gap:10px; align-items:center;">
+
+            <!-- Hours -->
+            <select name="wzq_settings[hours]">
+                <?php for($i=0; $i<=24; $i++): ?>
+                    <option value="<?php echo $i; ?>" <?php selected($h, $i); ?>>
+                        <?php echo str_pad($i,2,'0',STR_PAD_LEFT); ?> h
+                    </option>
+                <?php endfor; ?>
+            </select>
+
+            <!-- Minutes -->
+            <select name="wzq_settings[minutes]">
+                <?php for($i=0; $i<60; $i++): ?>
+                    <option value="<?php echo $i; ?>" <?php selected($m, $i); ?>>
+                        <?php echo str_pad($i,2,'0',STR_PAD_LEFT); ?> m
+                    </option>
+                <?php endfor; ?>
+            </select>
+
+            <!-- Seconds -->
+            <select name="wzq_settings[seconds]">
+                <?php for($i=0; $i<60; $i++): ?>
+                    <option value="<?php echo $i; ?>" <?php selected($s, $i); ?>>
+                        <?php echo str_pad($i,2,'0',STR_PAD_LEFT); ?> s
+                    </option>
+                <?php endfor; ?>
+            </select>
+
+        </div>
 
         <p><strong>🔀 Random Question Order</strong></p>
         <select name="wzq_settings[random_order]">
@@ -485,9 +522,15 @@ add_action('save_post', function($post_id){
 
     $settings = $_POST['wzq_settings'] ?? [];
 
+    $hours   = intval($settings['hours'] ?? 0);
+    $minutes = intval($settings['minutes'] ?? 0);
+    $seconds = intval($settings['seconds'] ?? 0);
+
+    $total_seconds = ($hours * 3600) + ($minutes * 60) + $seconds;
+
     $wpdb->insert($quiz_table, [
         'post_id' => $post_id,
-        'time_limit' => intval($settings['time_limit'] ?? 300),
+        'time_limit' => $total_seconds,
         'random_order' => intval($settings['random_order'] ?? 0),
         'ad_after' => intval($settings['ad_after'] ?? 3)
     ]);

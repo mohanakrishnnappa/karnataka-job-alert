@@ -283,7 +283,11 @@ function formatTime(sec) {
     let m = Math.floor((sec % 3600) / 60);
     let s = sec % 60;
 
-    return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+    if (h > 0) {
+        return `${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+    } else {
+        return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+    }
 }
 
 // 👉 NEXT BUTTON
