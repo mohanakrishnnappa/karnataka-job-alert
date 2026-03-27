@@ -275,7 +275,7 @@
 
 /* 🎯 REVIEW MODE */
 .wzq-review-mode .wzq-question {
-    display: block !important;
+    display: block;
 }
 
 .wzq-review-mode .wzq-nav,
@@ -362,6 +362,40 @@
     font-size: 13px;
     color: #6c7781;
     margin-top: 6px;
+}
+
+/* 🎯 PAGINATION */
+.wzq-pagination {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.wzq-page-btn {
+    padding: 6px 12px;
+    border: 1px solid #ddd;
+    background: #fff;
+    color: black;
+    cursor: pointer;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.wzq-page-btn:hover {
+    color: black;
+}
+
+.wzq-page-btn.active {
+    background: #007cba;
+    color: #fff;
+    border-color: #007cba;
+}
+
+.wzq-page-btn:hover {
+    background: #f0f7ff;
 }
 
 .wzq-review-restart {

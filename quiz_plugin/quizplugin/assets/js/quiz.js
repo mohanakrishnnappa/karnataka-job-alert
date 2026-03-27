@@ -41,6 +41,10 @@ questions.forEach((q, index) => {
 });
 
 const total = questions.length;
+// 🎯 REVIEW PAGINATION
+let reviewPage = 0;
+const perPage = 5;
+let totalPages = Math.ceil(total / perPage);
 
 const nextBtn = document.querySelector(".wzq-next");
 const prevBtn = document.querySelector(".wzq-prev");
@@ -91,6 +95,44 @@ function showQuestion(index) {
     }
 }
 
+function renderPagination() {
+    let pagination = document.querySelector(".wzq-pagination");
+    if (!pagination) {
+        pagination = document.createElement("div");
+        pagination.className = "wzq-pagination";
+        container.appendChild(pagination);
+    }
+    pagination.innerHTML = "";
+    for (let i = 0; i < totalPages; i++) {
+        const btn = document.createElement("button");
+        btn.innerText = i + 1;
+        btn.className = "wzq-page-btn";
+        if (i === reviewPage) {
+            btn.classList.add("active");
+        }
+        btn.addEventListener("click", () => {
+            reviewPage = i;
+            showReviewPage(reviewPage);
+            window.scrollTo({ top: 0, behavior: "smooth" });
+        });
+        pagination.appendChild(btn);
+    }
+}
+
+// 🎯 SHOW REVIEW PAGE (NUMBERED)
+function showReviewPage(page) {
+    const start = page * perPage;
+    const end = start + perPage;
+    questions.forEach((q, index) => {
+        if (index >= start && index < end) {
+            q.style.display = "block";
+        } else {
+            q.style.display = "none";
+        }
+    });
+    renderPagination();
+}
+
 // 👉 NEXT BUTTON
 nextBtn.addEventListener("click", () => {
 
@@ -130,13 +172,26 @@ nextBtn.addEventListener("click", () => {
         warningBox.classList.remove("show");
         warningBox.style.display = "none";
 
-        // show all questions
+        // show explanations for all
         questions.forEach(q => {
-            q.classList.add("active");
-
             const exp = q.querySelector(".wzq-explanation");
             if (exp) exp.style.display = "block";
         });
+
+        // 🎯 PAGINATION LOGIC
+        if (total > 5) {
+
+            reviewPage = 0;
+            totalPages = Math.ceil(total / perPage);
+
+            showReviewPage(reviewPage);
+
+        } else {
+            // show all if <=5
+            questions.forEach(q => {
+                q.style.display = "block";
+            });
+        }
 
         // ✅ CREATE SCORE BAR
         let reviewScore = document.querySelector(".wzq-review-score");
