@@ -25,9 +25,7 @@ add_shortcode('wz_quiz', function($atts){
     ob_start();
 ?>
 
-<div class="wzq-wrapper" 
-     data-total="<?php echo count($questions); ?>" 
-     data-random="<?php echo $quiz->random_order; ?>">
+<div class="wzq-wrapper" data-total="<?php echo count($questions); ?>">
 
     <div class="wzq-card">
 
@@ -42,10 +40,7 @@ add_shortcode('wz_quiz', function($atts){
 
         <div class="wzq-question <?php echo $i==0 ? 'active' : ''; ?>" data-index="<?php echo $i; ?>">
 
-            <h3 class="wzq-question-text">
-                <span class="wzq-q-number">Q<?php echo $i+1; ?>.</span>
-                <?php echo $q->question; ?>
-            </h3>
+            <h3><?php echo $q->question; ?></h3>
 
             <div class="wzq-options">
 

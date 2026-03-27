@@ -154,7 +154,6 @@ function wzq_builder_ui($post) {
 <div class="wzq-tabs">
     <button type="button" onclick="wzqShowTab('manual', this)">➕ Manual Add</button>
     <button type="button" onclick="wzqShowTab('import', this)">📥 Import JSON</button>
-    <button type="button" onclick="wzqShowTab('settings', this)">⚙️ Settings</button>
 </div>
 
 <!-- MANUAL BUILDER -->
@@ -209,30 +208,7 @@ function wzq_builder_ui($post) {
 <!-- IMPORT JSON -->
 <div id="wzq-import" class="wzq-tab-content">
     <textarea style="width:100%;height:200px;" name="wzq_json"></textarea>
-    <p><button type="button" class="button button-primary" onclick="wzqImportJSON()">🚀 Import Now</button></p>
-</div>
-
-<!-- SETTINGS -->
-<div id="wzq-settings" class="wzq-tab-content">
-
-    <div class="wzq-question-box">
-
-        <p><strong>⏱ Time Limit (seconds)</strong></p>
-        <input type="number" name="wzq_settings[time_limit]" 
-            value="<?php echo $quiz->time_limit ?? 300; ?>">
-
-        <p><strong>🔀 Random Question Order</strong></p>
-        <select name="wzq_settings[random_order]">
-            <option value="0" <?php selected($quiz->random_order ?? 0, 0); ?>>No</option>
-            <option value="1" <?php selected($quiz->random_order ?? 0, 1); ?>>Yes</option>
-        </select>
-
-        <p><strong>📢 Show Ad After (question no.)</strong></p>
-        <input type="number" name="wzq_settings[ad_after]" 
-            value="<?php echo $quiz->ad_after ?? 3; ?>">
-
-    </div>
-
+    <p><button type="button" class="button" onclick="alert('Click Update/Publish to import')">Import</button></p>
 </div>
 
 <script>
@@ -293,76 +269,6 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-function wzqImportJSON() {
-
-    const textarea = document.querySelector('[name="wzq_json"]');
-    let jsonText = textarea.value;
-
-    if (!jsonText.trim()) {
-        alert("Paste JSON first");
-        return;
-    }
-
-    let data;
-
-    try {
-        data = JSON.parse(jsonText);
-    } catch (e) {
-        alert("Invalid JSON");
-        return;
-    }
-
-    // Support both formats
-    let questions = data.questions ? data.questions : data;
-
-    const container = document.getElementById('wzq-questions');
-
-    questions.forEach((q) => {
-
-        let index = container.querySelectorAll('.wzq-question-box').length;
-
-        let html = `
-        <div class="wzq-question-box">
-
-            <p><strong>Question</strong></p>
-            <textarea name="questions[`+index+`][question]">${q.question}</textarea>
-
-            <p>Options</p>
-            <div class="wzq-options-grid">
-                <div><span>A)</span><input type="text" name="questions[`+index+`][a]" value="${q.options.A || q.options.a}"></div>
-                <div><span>B)</span><input type="text" name="questions[`+index+`][b]" value="${q.options.B || q.options.b}"></div>
-                <div><span>C)</span><input type="text" name="questions[`+index+`][c]" value="${q.options.C || q.options.c}"></div>
-                <div><span>D)</span><input type="text" name="questions[`+index+`][d]" value="${q.options.D || q.options.d}"></div>
-            </div>
-
-            <p>Correct Answer</p>
-            <select name="questions[`+index+`][correct]">
-                <option value="a" ${q.answer == 'A' || q.correct == 'a' ? 'selected' : ''}>A</option>
-                <option value="b" ${q.answer == 'B' || q.correct == 'b' ? 'selected' : ''}>B</option>
-                <option value="c" ${q.answer == 'C' || q.correct == 'c' ? 'selected' : ''}>C</option>
-                <option value="d" ${q.answer == 'D' || q.correct == 'd' ? 'selected' : ''}>D</option>
-            </select>
-
-            <p>Explanation</p>
-            <textarea name="questions[`+index+`][explanation]">${q.explanation || ''}</textarea>
-
-            <button type="button" onclick="this.parentElement.remove()">❌ Remove</button>
-
-            <hr>
-
-        </div>
-        `;
-
-        container.insertAdjacentHTML('beforeend', html);
-    });
-
-    // 🔥 Switch to manual tab automatically
-    const manualBtn = document.querySelector('.wzq-tabs button');
-    wzqShowTab('manual', manualBtn);
-
-    alert("Imported successfully ✅");
-}
-
 </script>
 
 <?php
@@ -399,13 +305,12 @@ add_action('save_post', function($post_id){
         $wpdb->delete($quiz_table, ['id' => $old_quiz->id]);
     }
 
-    $settings = $_POST['wzq_settings'] ?? [];
-
+    // insert quiz
     $wpdb->insert($quiz_table, [
         'post_id' => $post_id,
-        'time_limit' => intval($settings['time_limit'] ?? 300),
-        'random_order' => intval($settings['random_order'] ?? 0),
-        'ad_after' => intval($settings['ad_after'] ?? 3)
+        'time_limit' => 300,
+        'random_order' => 0,
+        'ad_after' => 3
     ]);
 
     $quiz_id = $wpdb->insert_id;

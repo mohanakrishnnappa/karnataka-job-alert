@@ -1,45 +1,7 @@
-// 🔀 SHUFFLE FUNCTION (Fisher-Yates)
-function shuffleArray(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        let j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
-}
-
 let current = 0;
 let score = 0;
 
-// wrapper
-const wrapper = document.querySelector(".wzq-wrapper");
-
-// check random setting (from PHP)
-const isRandom = wrapper?.dataset?.random == "1";
-
-// get questions as array
-let questions = Array.from(document.querySelectorAll(".wzq-question"));
-
-// 🔀 APPLY RANDOM ORDER
-if (isRandom) {
-    shuffleArray(questions);
-}
-
-// re-append shuffled questions into DOM
-const container = document.querySelector(".wzq-card");
-
-questions.forEach(q => {
-    container.insertBefore(q, container.querySelector(".wzq-nav"));
-});
-
-// 🔥 UPDATE INDEX + QUESTION NUMBER
-questions.forEach((q, index) => {
-    q.dataset.index = index;
-
-    let num = q.querySelector(".wzq-q-number");
-    if (num) {
-        num.innerText = "Q" + (index + 1) + ".";
-    }
-});
-
+const questions = document.querySelectorAll(".wzq-question");
 const total = questions.length;
 
 const nextBtn = document.querySelector(".wzq-next");
@@ -91,14 +53,14 @@ document.querySelectorAll(".wzq-option").forEach(btn => {
 
         const parent = this.closest(".wzq-question");
 
-        // ❌ already answered → stop
+        // ❌ already answered → stop everything
         if (parent.classList.contains("answered")) return;
 
         parent.classList.add("answered");
 
         const correct = this.dataset.correct;
 
-        // 👉 disable ALL buttons
+        // 👉 disable ALL buttons immediately
         parent.querySelectorAll(".wzq-option").forEach(opt => {
             opt.disabled = true;
         });
@@ -122,15 +84,44 @@ document.querySelectorAll(".wzq-option").forEach(btn => {
     });
 });
 
+
+// 🔥 RESET FUNCTION (CLEAN WAY)
+function resetQuiz() {
+
+    current = 0;
+    score = 0;
+
+    questions.forEach(q => {
+        q.classList.remove("active", "answered");
+
+        q.querySelectorAll(".wzq-option").forEach(opt => {
+            opt.classList.remove("correct", "wrong");
+            opt.disabled = false;
+        });
+
+        q.querySelector(".wzq-explanation").style.display = "none";
+    });
+
+    prevBtn.disabled = true;
+
+    // 🔥 IMPORTANT: re-init UI properly
+    showQuestion(0);
+
+    // show quiz again
+    document.querySelector(".wzq-card").style.display = "block";
+    resultBox.style.display = "none";
+}
+
+
 // 🔁 RESTART BUTTON
 document.addEventListener("click", function (e) {
     if (e.target.classList.contains("wzq-restart")) {
-        location.reload();
+        resetQuiz();
     }
 });
 
 
-// 🚀 INITIAL LOAD
+// 🚀 INITIAL LOAD FIX
 document.addEventListener("DOMContentLoaded", function () {
     showQuestion(0);
 });

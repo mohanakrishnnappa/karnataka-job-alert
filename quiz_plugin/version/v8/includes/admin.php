@@ -154,7 +154,6 @@ function wzq_builder_ui($post) {
 <div class="wzq-tabs">
     <button type="button" onclick="wzqShowTab('manual', this)">➕ Manual Add</button>
     <button type="button" onclick="wzqShowTab('import', this)">📥 Import JSON</button>
-    <button type="button" onclick="wzqShowTab('settings', this)">⚙️ Settings</button>
 </div>
 
 <!-- MANUAL BUILDER -->
@@ -210,29 +209,6 @@ function wzq_builder_ui($post) {
 <div id="wzq-import" class="wzq-tab-content">
     <textarea style="width:100%;height:200px;" name="wzq_json"></textarea>
     <p><button type="button" class="button button-primary" onclick="wzqImportJSON()">🚀 Import Now</button></p>
-</div>
-
-<!-- SETTINGS -->
-<div id="wzq-settings" class="wzq-tab-content">
-
-    <div class="wzq-question-box">
-
-        <p><strong>⏱ Time Limit (seconds)</strong></p>
-        <input type="number" name="wzq_settings[time_limit]" 
-            value="<?php echo $quiz->time_limit ?? 300; ?>">
-
-        <p><strong>🔀 Random Question Order</strong></p>
-        <select name="wzq_settings[random_order]">
-            <option value="0" <?php selected($quiz->random_order ?? 0, 0); ?>>No</option>
-            <option value="1" <?php selected($quiz->random_order ?? 0, 1); ?>>Yes</option>
-        </select>
-
-        <p><strong>📢 Show Ad After (question no.)</strong></p>
-        <input type="number" name="wzq_settings[ad_after]" 
-            value="<?php echo $quiz->ad_after ?? 3; ?>">
-
-    </div>
-
 </div>
 
 <script>
@@ -399,13 +375,12 @@ add_action('save_post', function($post_id){
         $wpdb->delete($quiz_table, ['id' => $old_quiz->id]);
     }
 
-    $settings = $_POST['wzq_settings'] ?? [];
-
+    // insert quiz
     $wpdb->insert($quiz_table, [
         'post_id' => $post_id,
-        'time_limit' => intval($settings['time_limit'] ?? 300),
-        'random_order' => intval($settings['random_order'] ?? 0),
-        'ad_after' => intval($settings['ad_after'] ?? 3)
+        'time_limit' => 300,
+        'random_order' => 0,
+        'ad_after' => 3
     ]);
 
     $quiz_id = $wpdb->insert_id;

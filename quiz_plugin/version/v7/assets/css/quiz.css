@@ -28,22 +28,6 @@
     background: #4caf50;
 }
 
-.wzq-question-text {
-    font-size: 18px;
-    font-weight: 600;
-    margin-bottom: 15px;
-    color: #1d2327;
-    line-height: 1.5;
-}
-
-.wzq-q-number {
-    color: #fff;
-    background: #007cba;
-    padding: 4px 8px;
-    border-radius: 6px;
-    margin-right: 5px;
-}
-
 /* Base option */
 .wzq-option {
     width: 100%;
@@ -140,7 +124,6 @@
 .wzq-question {
     display: none;
     animation: fadeIn 0.3s ease;
-    padding-top: 5px;
 }
 
 .wzq-question.active {
