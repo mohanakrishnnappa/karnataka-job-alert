@@ -170,9 +170,7 @@ function wzq_builder_ui($post) {
 
                 <p><strong>Question <?php echo str_pad($i+1, 2, '0', STR_PAD_LEFT); ?>:</strong></p>
 
-                <textarea name="questions[<?php echo $i; ?>][question]" style="width:100%">
-                    <?php echo esc_textarea($q->question); ?>
-                </textarea>
+                <textarea name="questions[<?php echo $i; ?>][question]" style="width:100%"><?php echo esc_textarea($q->question); ?></textarea>
 
                 <p>Options</p>
                 <div class="wzq-options-grid">
@@ -191,9 +189,7 @@ function wzq_builder_ui($post) {
                 </select>
 
                 <p>Explanation</p>
-                <textarea name="questions[<?php echo $i; ?>][explanation]" style="width:100%">
-                    <?php echo esc_textarea($q->explanation); ?>
-                </textarea>
+                <textarea name="questions[<?php echo $i; ?>][explanation]" style="width:100%"><?php echo esc_textarea($q->explanation); ?></textarea>
 
                 <button type="button" onclick="wzqRemoveQuestion(this)">❌ Remove</button>
 
@@ -507,13 +503,13 @@ add_action('save_post', function($post_id){
             foreach($data['questions'] as $i => $q){
                 $wpdb->insert($question_table, [
                     'quiz_id' => $quiz_id,
-                    'question' => sanitize_textarea_field($q['question']),
+                    'question' => trim(sanitize_textarea_field($q['question'])),
                     'option_a' => sanitize_text_field($q['options']['a']),
                     'option_b' => sanitize_text_field($q['options']['b']),
                     'option_c' => sanitize_text_field($q['options']['c']),
                     'option_d' => sanitize_text_field($q['options']['d']),
                     'correct' => sanitize_text_field($q['correct']),
-                    'explanation' => sanitize_textarea_field($q['explanation']),
+                    'explanation' => trim(sanitize_textarea_field($q['explanation'])),
                     'order_index' => $i
                 ]);
             }
@@ -525,13 +521,13 @@ add_action('save_post', function($post_id){
         foreach($_POST['questions'] as $i => $q){
             $wpdb->insert($question_table, [
                 'quiz_id' => $quiz_id,
-                'question' => sanitize_textarea_field($q['question']),
+                'question' => trim(sanitize_textarea_field($q['question'])),
                 'option_a' => sanitize_text_field($q['a']),
                 'option_b' => sanitize_text_field($q['b']),
                 'option_c' => sanitize_text_field($q['c']),
                 'option_d' => sanitize_text_field($q['d']),
                 'correct' => sanitize_text_field($q['correct']),
-                'explanation' => sanitize_textarea_field($q['explanation']),
+                'explanation' => trim(sanitize_textarea_field($q['explanation'])),
                 'order_index' => $i
             ]);
         }
