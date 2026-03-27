@@ -12,7 +12,12 @@ add_action('init', function() {
 
     register_taxonomy('wz_quiz_category', 'wz_quiz', [
         'label' => 'Quiz Categories',
-        'hierarchical' => true
+        'hierarchical' => true,
+        'rewrite' => [
+            'slug' => 'quiz-category',
+            'with_front' => false
+        ],
+        'show_admin_column' => true
     ]);
 
 });
