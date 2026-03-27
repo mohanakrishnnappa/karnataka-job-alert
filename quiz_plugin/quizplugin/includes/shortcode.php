@@ -27,7 +27,8 @@ add_shortcode('wz_quiz', function($atts){
 
 <div class="wzq-wrapper" 
      data-total="<?php echo count($questions); ?>" 
-     data-random="<?php echo $quiz->random_order; ?>">
+     data-random="<?php echo $quiz->random_order; ?>"
+     data-timer="<?php echo isset($quiz->time_limit) ? intval($quiz->time_limit) : 0; ?>">
 
     <div class="wzq-card">
         <div class="wzq-warning">
@@ -35,7 +36,16 @@ add_shortcode('wz_quiz', function($atts){
             <button class="wzq-warning-close">&times;</button>
         </div>
         <div class="wzq-header">
-            <div class="wzq-progress-text">Question <span id="wzq-current">1</span> / <?php echo count($questions); ?></div>
+            <div class="wzq-header-top">
+                <div class="wzq-progress-text">
+                    Question <span id="wzq-current">1</span> / <?php echo count($questions); ?>
+                </div>
+
+                <div class="wzq-timer" style="display:none;">
+                    ⏱ <span id="wzq-time">00:00</span>
+                </div>
+            </div>
+
             <div class="wzq-bar">
                 <div class="wzq-bar-fill"></div>
             </div>

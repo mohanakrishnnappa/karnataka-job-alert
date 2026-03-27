@@ -8,6 +8,7 @@ function shuffleArray(array) {
 
 let current = 0;
 let score = 0;
+let timerInterval = null;
 
 // wrapper
 const wrapper = document.querySelector(".wzq-wrapper");
@@ -140,6 +141,8 @@ nextBtn.addEventListener("click", () => {
 
     // 👉 LAST QUESTION = SUBMIT
     if (current === total - 1) {
+
+        if (timerInterval) clearInterval(timerInterval);
 
         if (remaining > 0) {
 
@@ -297,5 +300,42 @@ document.addEventListener("click", function (e) {
 
 // 🚀 INITIAL LOAD
 document.addEventListener("DOMContentLoaded", function () {
+
     showQuestion(0);
+
+    // ⏱ TIMER FIXED
+    let timerValue = parseInt(wrapper?.dataset?.timer || 0);
+
+    const timerBox = document.querySelector(".wzq-timer");
+    const timerText = document.getElementById("wzq-time");
+
+    if (timerValue > 0 && timerBox && timerText) {
+
+        timerBox.style.display = "block";
+
+        let remaining = timerValue;
+
+        function updateTimer() {
+            let minutes = Math.floor(remaining / 60);
+            let seconds = remaining % 60;
+
+            timerText.innerText =
+                String(minutes).padStart(2, '0') + ":" +
+                String(seconds).padStart(2, '0');
+
+            if (remaining <= 0) {
+                clearInterval(timerInterval);
+
+                // ⛔ AUTO SUBMIT
+                nextBtn.click();
+                return;
+            }
+
+            remaining--;
+        }
+
+        updateTimer();
+        timerInterval = setInterval(updateTimer, 1000);
+    }
+
 });

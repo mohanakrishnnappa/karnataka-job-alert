@@ -398,7 +398,26 @@
     background: #f0f7ff;
 }
 
+/* Restart button */
 .wzq-review-restart {
     display: block;
     margin: 30px auto 10px;
+}
+
+/* 🎯 HEADER TOP (TEXT + TIMER) */
+.wzq-header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+/* 🎯 TIMER */
+.wzq-timer {
+    font-weight: 600;
+    background: #111;
+    color: #fff;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 14px;
 }
