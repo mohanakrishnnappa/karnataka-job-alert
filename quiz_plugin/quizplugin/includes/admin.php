@@ -807,27 +807,35 @@ function wzq_reports_page(){
     </tr>
     </thead><tbody>";
 
-    foreach($reports as $r){
+    if(empty($reports)){
+        echo "<tr>
+                <td colspan='6' style='text-align:center;padding:20px;font-size:16px;color:#666;'>
+                    📭 No reported questions found
+                </td>
+            </tr>";
+    } else {
+        foreach($reports as $r){
 
-        $delete_url = wp_nonce_url(
-            admin_url('admin.php?page=wzq-reports&delete_report='.$r->id),
-            'wzq_delete_report_'.$r->id
-        );
+            $delete_url = wp_nonce_url(
+                admin_url('admin.php?page=wzq-reports&delete_report='.$r->id),
+                'wzq_delete_report_'.$r->id
+            );
 
-        echo "<tr>";
-        echo "<td>{$r->id}</td>";
-        echo "<td>".esc_html($r->question_text)."</td>";
-        echo "<td>".esc_html($r->issue)."</td>";
-        echo "<td>{$r->user_ip}</td>";
-        echo "<td>{$r->created_at}</td>";
-        echo "<td>
-                <a href='{$delete_url}' 
-                onclick=\"return confirm('Delete this report?')\" 
-                class='button button-danger'>
-                Delete
-                </a>
-            </td>";
-        echo "</tr>";
+            echo "<tr>";
+            echo "<td>{$r->id}</td>";
+            echo "<td>".esc_html($r->question_text)."</td>";
+            echo "<td>".esc_html($r->issue)."</td>";
+            echo "<td>{$r->user_ip}</td>";
+            echo "<td>{$r->created_at}</td>";
+            echo "<td>
+                    <a href='{$delete_url}' 
+                    onclick=\"return confirm('Delete this report?')\" 
+                    class='button button-danger'>
+                    Delete
+                    </a>
+                </td>";
+            echo "</tr>";
+        }
     }
 
     echo "</tbody></table>";
