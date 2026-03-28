@@ -1,0 +1,830 @@
+/* =============================================================
+   WZQ QUIZ STYLESHEET
+   Sections:
+   1.  Layout & Card
+   2.  Header & Progress Bar
+   3.  Question Block
+   4.  Status & Meta Labels
+   5.  Answer Options
+   6.  Option Icons (Correct / Wrong)
+   7.  Explanation
+   8.  Warning Banner
+   9.  Navigation
+   10. Result & Restart
+   11. Review Mode
+   12. Score Bar
+   13. Pagination
+   14. Report Button & Modal
+   15. Timer
+   16. Animations
+   ============================================================= */
+
+
+/* =============================================================
+   1. LAYOUT & CARD
+   ============================================================= */
+
+.wzq-wrapper {
+    width: 100%;
+    max-width: 100%;
+    margin: 0;
+}
+
+.wzq-card {
+    width: 100%;
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+}
+
+
+/* =============================================================
+   2. HEADER & PROGRESS BAR
+   ============================================================= */
+
+.wzq-header {
+    margin-bottom: 15px;
+}
+
+/* Header top row — title + timer side by side */
+.wzq-header-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+/* Thin progress bar track */
+.wzq-bar {
+    height: 6px;
+    background: #eee;
+    border-radius: 5px;
+}
+
+/* Animated fill */
+.wzq-bar-fill {
+    height: 100%;
+    width: 0%;
+    background: #4caf50;
+    border-radius: 50px;
+    transition: width 0.4s ease;
+}
+
+/* Initial Quiz Start */
+.wzq-start-screen {
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    text-align: left;
+}
+
+.wzq-quiz-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.wzq-start-btn {
+    padding: 12px 30px;
+    font-size: 16px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #007cba, #005a87);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.wzq-start-btn:hover {
+    transform: translateY(-1px);
+}
+
+/* =============================================================
+   3. QUESTION BLOCK
+   ============================================================= */
+
+.wzq-question {
+    display: none;
+    animation: fadeIn 0.3s ease;
+    padding-top: 5px;
+    /* Separator between questions */
+    border-bottom: 1px solid #eee;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+}
+
+.wzq-question:last-child {
+    border-bottom: none;
+}
+
+.wzq-question.active {
+    display: block;
+}
+
+/* Question header wrapper */
+.wzq-q-header {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+/* Keep first child (question text) natural width */
+.wzq-q-header>*:first-child {
+    flex: 1;
+}
+
+/* Meta row — question number + status label */
+.wzq-q-meta {
+    display: flex;
+    padding-bottom: 6px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Question number badge */
+.wzq-q-number {
+    color: #fff;
+    background: #007cba;
+    padding: 4px 8px;
+    border-radius: 6px;
+    margin-right: 5px;
+}
+
+/* Question text */
+.wzq-question-text {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    color: #1d2327;
+    line-height: 1.5;
+}
+
+
+/* =============================================================
+   4. STATUS & META LABELS
+   ============================================================= */
+
+/* Base status label */
+.wzq-status-label {
+    padding: 4px 10px;
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 6px;
+}
+
+/* ✅ Answered = GREEN */
+.wzq-status-label.answered {
+    background: #e6f4ea;
+    color: #1e7e34;
+    border: 1px solid #28a745;
+}
+
+/* ❌ Not Answered = Light Yellow */
+.wzq-status-label.unanswered,
+.wzq-unanswered-label {
+    background: #fff8e1;
+    border: 1px solid #ffe58f;
+    color: #8a6d3b;
+}
+
+/* Inline unanswered label (used inside question list) */
+.wzq-unanswered-label {
+    margin-left: 5px;
+    margin-right: 5px;
+    padding: 3px 8px;
+    font-size: 12px;
+    font-weight: 600;
+    border-radius: 6px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+/* =============================================================
+   5. ANSWER OPTIONS
+   ============================================================= */
+
+/* Base option button */
+.wzq-option {
+    width: 100%;
+    text-align: left;
+    padding: 12px 15px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #fff;
+    color: #333 !important;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    position: relative;
+}
+
+/* Hover — only before answered */
+.wzq-question:not(.answered) .wzq-option:hover {
+    border-color: #007bff;
+    background: #f5f9ff;
+}
+
+/* Correct option hover keeps green */
+.wzq-question:not(.answered) .wzq-option.correct:hover {
+    background: #e6f4ea;
+}
+
+/* ✅ Correct answer */
+.wzq-option.correct {
+    opacity: 1 !important;
+    background: #e6f4ea;
+    border-color: #28a745;
+    color: #1e7e34 !important;
+    font-weight: 600;
+}
+
+/* ❌ Wrong answer */
+.wzq-option.wrong {
+    background: #fdecea;
+    border-color: #dc3545;
+    color: #a71d2a !important;
+    font-weight: 500;
+}
+
+/* After answered — disable pointer */
+.wzq-question.answered .wzq-option {
+    cursor: default;
+    opacity: 1;
+}
+
+/* Unselected options after answered — muted */
+.wzq-question.answered .wzq-option:not(.correct):not(.wrong) {
+    background: #f9f9f9;
+    color: #888;
+}
+
+/* Disabled state */
+.wzq-option:disabled {
+    opacity: 0.6;
+    cursor: default;
+}
+
+/* Answered question options — correct points */
+.wzq-correct-point {
+    background: #e6f7ec;
+    color: #1a7f37;
+    border: 1px solid #1a7f37;
+}
+
+/* Answered question options — wrong points */
+.wzq-wrong-point {
+    background: #fdecea;
+    color: #d93025;
+    border: 1px solid #d93025;
+}
+
+
+/* =============================================================
+   6. OPTION ICONS (CORRECT / WRONG)
+   ============================================================= */
+
+/* Shared icon base */
+.wzq-option.correct::after,
+.wzq-option.wrong::after {
+    content: "";
+    width: 22px;
+    height: 22px;
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-radius: 50%;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+/* ✅ Checkmark icon */
+.wzq-option.correct::after {
+    background-color: #28a745;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M20 6L9 17l-5-5' stroke='white' stroke-width='2.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+    background-size: 12px;
+}
+
+/* ❌ Cross icon */
+.wzq-option.wrong::after {
+    background-color: #dc3545;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M6 6L18 18M18 6L6 18' stroke='white' stroke-width='2.5' fill='none' stroke-linecap='round'/></svg>");
+    background-size: 12px;
+}
+
+
+/* =============================================================
+   7. EXPLANATION
+   ============================================================= */
+
+.wzq-explanation {
+    display: none;
+    margin-top: 10px;
+    background: #f9f9f9;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.wzq-expl-title {
+    font-weight: 700;
+    display: block;
+    margin-bottom: 5px;
+}
+
+
+/* =============================================================
+   8. WARNING BANNER
+   ============================================================= */
+
+.wzq-warning {
+    display: none;
+}
+
+.wzq-warning.show {
+    display: flex;
+    background: #fff8e1;
+    color: #8a6d3b;
+    border: 1px solid #ffe58f;
+    padding: 12px 15px;
+    margin-bottom: 15px;
+    border-radius: 8px;
+    font-size: 14px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.wzq-warning-close {
+    background: transparent;
+    border: none;
+    font-size: 18px;
+    font-weight: 600;
+    color: #8a6d3b;
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.wzq-warning-close:hover {
+    background: rgba(0, 0, 0, 0.08);
+    color: #000;
+}
+
+.wzq-warning-close:active {
+    transform: scale(0.9);
+}
+
+
+/* =============================================================
+   9. NAVIGATION
+   ============================================================= */
+
+.wzq-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+    padding: 0 5px;
+}
+
+.wzq-nav button {
+    padding: 10px 20px;
+    font-size: 14px;
+    border-radius: 6px;
+    min-width: 100px;
+    text-align: center;
+}
+
+/* Shared prev/next base */
+.wzq-prev,
+.wzq-next {
+    padding: 10px 20px;
+    min-width: 110px;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+}
+
+.wzq-prev {
+    background: #ddd;
+    color: #333;
+}
+
+/* Merged both .wzq-prev:disabled declarations into one */
+.wzq-prev:disabled {
+    background: #ccc;
+    color: #777;
+    cursor: not-allowed;
+}
+
+.wzq-next {
+    background: #333;
+    color: #fff;
+}
+
+
+/* =============================================================
+   10. RESULT & RESTART
+   ============================================================= */
+
+.wzq-result {
+    text-align: center;
+}
+
+.wzq-restart {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 12px 25px;
+    background: linear-gradient(135deg, #007bff, #0056b3);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* Restart button inside review — block + centered */
+.wzq-review-restart {
+    display: block;
+    margin: 30px auto 10px;
+}
+
+/* Review button (shown on result screen) */
+.wzq-review {
+    margin-top: 10px;
+    margin-right: 10px;
+    padding: 12px 25px;
+    background: linear-gradient(135deg, #28a745, #1e7e34);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+/* Score time display */
+.wzq-score-time {
+    margin-top: 10px;
+    font-size: 14px;
+    color: #555;
+}
+
+
+/* =============================================================
+   11. REVIEW MODE
+   ============================================================= */
+
+/* Show all questions at once */
+.wzq-review-mode .wzq-question {
+    display: block;
+}
+
+/* Hide quiz chrome in review */
+.wzq-review-mode .wzq-nav,
+.wzq-review-mode .wzq-header,
+.wzq-review-mode .wzq-warning {
+    display: none !important;
+}
+
+/* Push report button to the right */
+.wzq-review-mode .wzq-actions {
+    margin-left: auto;
+}
+
+/* Remove dull/disabled look in review mode */
+.wzq-review-mode .wzq-option:disabled {
+    opacity: 1 !important;
+}
+
+/* Clean unselected options in review */
+.wzq-review-mode .wzq-option:not(.correct):not(.wrong) {
+    background: #f9f9f9;
+    color: #333;
+    border-color: #ddd;
+}
+
+
+/* =============================================================
+   12. SCORE BAR
+   ============================================================= */
+
+.wzq-review-score {
+    background: #f5f7fa;
+    border: 1px solid #e3e6ea;
+    padding: 16px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+/* Top row — score text + percent */
+.wzq-score-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.wzq-score-text {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1d2327;
+}
+
+.wzq-score-percent {
+    font-size: 14px;
+    color: #6c7781;
+}
+
+/* Progress bar */
+.wzq-score-bar {
+    width: 100%;
+    height: 6px;
+    background: #e5e7eb;
+    border-radius: 4px;
+    overflow: hidden;
+    margin: 6px 0;
+}
+
+.wzq-score-fill {
+    height: 100%;
+    background: #4caf50;
+    border-radius: 4px;
+}
+
+/* Remark text below bar */
+.wzq-score-remark {
+    font-size: 13px;
+    color: #6c7781;
+    margin-top: 6px;
+}
+
+
+/* =============================================================
+   13. PAGINATION
+   ============================================================= */
+
+.wzq-pagination {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.wzq-page-btn {
+    padding: 6px 12px;
+    border: 1px solid #ddd;
+    background: #fff;
+    color: black;
+    cursor: pointer;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.wzq-page-btn.active {
+    background: #007cba;
+    color: #fff;
+    border-color: #007cba;
+}
+
+.wzq-page-btn:hover {
+    background: #f0f7ff;
+    color: black;
+}
+
+
+/* =============================================================
+   14. REPORT BUTTON & MODAL
+   ============================================================= */
+
+/* Actions wrapper */
+.wzq-actions {
+    display: flex;
+    flex-shrink: 0;
+}
+
+/* Report button — merged both duplicate definitions into one */
+.wzq-report,
+.wzq-report:focus {
+    background: #fdecea;
+    border: 1px solid #dc3545;
+    color: #a71d2a;
+    padding: 6px 12px;
+    font-size: 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-left: 8px;
+}
+
+.wzq-report:hover {
+    background: #ffeaea;
+    color: #a71d2a;
+}
+
+/* Reported (submitted) state */
+.wzq-report.wzq-reported {
+    background: #28a745;
+    color: #fff;
+    border: none;
+    cursor: default;
+    opacity: 0.9;
+}
+
+/* --- Modal backdrop --- */
+.wzq-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: rgba(15, 23, 42, 0.55);
+    backdrop-filter: blur(6px);
+    align-items: center;
+    justify-content: center;
+}
+
+.wzq-modal.show {
+    display: flex;
+}
+
+/* Modal card */
+.wzq-modal-content {
+    background: #ffffff;
+    border-radius: 16px;
+    width: 420px;
+    max-width: 92%;
+    padding: 22px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+    animation: wzqModalIn 0.25s ease;
+}
+
+/* Modal heading */
+.wzq-modal-content h3 {
+    font-size: 20px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Reason select dropdown */
+#wzq-report-reason {
+    width: 100%;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid #e5e7eb;
+    margin-top: 8px;
+    font-size: 14px;
+    background: #f9fafb;
+    transition: all 0.2s ease;
+}
+
+#wzq-report-reason:focus {
+    outline: none;
+    border-color: #007cba;
+    background: #fff;
+}
+
+/* Report textarea */
+#wzq-report-text {
+    width: 100%;
+    height: 90px;
+    margin-top: 10px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    border: 1px solid #e5e7eb;
+    font-size: 14px;
+    background: #f9fafb;
+    transition: all 0.2s ease;
+}
+
+#wzq-report-text:focus {
+    outline: none;
+    border-color: #007cba;
+    background: #fff;
+}
+
+/* Feedback message */
+.wzq-report-msg {
+    margin-top: 10px;
+    font-size: 13px;
+    padding: 8px 10px;
+    border-radius: 8px;
+    display: none;
+}
+
+.wzq-report-msg.show {
+    display: block;
+}
+
+.wzq-report-msg.success {
+    background: #e6f7ee;
+    color: #1e7e34;
+}
+
+.wzq-report-msg.error {
+    background: #fdecea;
+    color: #dc3545;
+}
+
+.wzq-report-msg.warning {
+    background: #fff3cd;
+    color: #856404;
+}
+
+/* Modal action buttons row */
+.wzq-modal-actions {
+    margin-top: 16px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+/* Cancel button */
+#wzq-report-cancel {
+    padding: 8px 14px;
+    border-radius: 8px;
+    border: none;
+    background: #e5e7eb;
+    color: #333;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+#wzq-report-cancel:hover {
+    background: #d1d5db;
+}
+
+/* Submit button */
+#wzq-report-submit {
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: none;
+    background: linear-gradient(135deg, #007cba, #005a87);
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+#wzq-report-submit:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 14px rgba(0, 123, 186, 0.25);
+}
+
+#wzq-report-submit:disabled {
+    background: #9ca3af;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+
+/* =============================================================
+   15. TIMER
+   ============================================================= */
+
+.wzq-timer {
+    font-weight: 600;
+    background: #111;
+    color: #fff;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+
+/* =============================================================
+   16. ANIMATIONS
+   ============================================================= */
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes wzqModalIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px) scale(0.97);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
