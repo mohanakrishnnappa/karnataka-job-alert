@@ -329,6 +329,47 @@ function formatTime(sec) {
     }
 }
 
+function startQuiz() {
+
+    // reset tracking
+    startTime = Date.now();
+    endTime = null;
+
+    showQuestion(0);
+
+    let timerValue = parseInt(wrapper?.dataset?.timer || 0);
+
+    const timerBox = document.querySelector(".wzq-timer");
+    const timerText = document.getElementById("wzq-time");
+
+    if (timerValue > 0 && timerBox && timerText) {
+
+        timerBox.style.display = "block";
+
+        let remaining = timerValue;
+
+        function updateTimer() {
+
+            let m = Math.floor(remaining / 60);
+            let s = remaining % 60;
+
+            timerText.innerText =
+                `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+
+            if (remaining <= 0) {
+                clearInterval(timerInterval);
+                submitQuiz(true); // force submit
+            }
+
+            remaining--;
+        }
+
+        updateTimer();
+
+        timerInterval = setInterval(updateTimer, 1000);
+    }
+}
+
 // 👉 NEXT BUTTON
 nextBtn.addEventListener("click", () => {
 
@@ -401,40 +442,24 @@ document.addEventListener("click", function (e) {
     }
 });
 
-// 🚀 INITIAL LOAD
 document.addEventListener("DOMContentLoaded", function () {
 
-    showQuestion(0);
+    const startBtn = document.querySelector(".wzq-start-btn");
+    const startScreen = document.querySelector(".wzq-start-screen");
+    const quizCard = document.querySelector(".wzq-card");
 
-    // ⏱ TIMER FIXED
-    let timerValue = parseInt(wrapper?.dataset?.timer || 0);
+    if (!startBtn) return;
 
-    const timerBox = document.querySelector(".wzq-timer");
-    const timerText = document.getElementById("wzq-time");
+    startBtn.addEventListener("click", function () {
 
-    if (timerValue > 0 && timerBox && timerText) {
+        // hide start screen
+        startScreen.style.display = "none";
 
-        timerBox.style.display = "block";
+        // show quiz
+        quizCard.style.display = "block";
 
-        let remaining = timerValue;
-
-        function updateTimer() {
-            timerText.innerText = formatTime(remaining);
-
-            if (remaining <= 0) {
-                clearInterval(timerInterval);
-
-                endTime = Date.now();
-
-                submitQuiz(true);
-                return;
-            }
-
-            remaining--;
-        }
-
-        updateTimer();
-        timerInterval = setInterval(updateTimer, 1000);
-    }
+        // 👉 START QUIZ HERE
+        startQuiz();
+    });
 
 });

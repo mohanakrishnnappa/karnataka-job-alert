@@ -35,7 +35,13 @@ add_shortcode('wz_quiz', function($atts){
      data-timer="<?php echo isset($quiz->time_limit) ? intval($quiz->time_limit) : 0; ?>"
      data-quiz="<?php echo $quiz->id; ?>">
 
-    <div class="wzq-card">
+    <div class="wzq-start-screen">
+        <h3 class="wzq-quiz-title"><?php echo get_the_title($post_id); ?></h3>
+
+        <button class="wzq-start-btn">▶ Start Quiz</button>
+    </div>
+
+    <div class="wzq-card" style="display:none;">
         <div class="wzq-warning">
             <span class="wzq-warning-text"></span>
             <button class="wzq-warning-close">&times;</button>

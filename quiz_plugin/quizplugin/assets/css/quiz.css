@@ -71,6 +71,36 @@
     transition: width 0.4s ease;
 }
 
+/* Initial Quiz Start */
+.wzq-start-screen {
+    width: 100%;
+    max-width: 700px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+    text-align: left;
+}
+
+.wzq-quiz-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.wzq-start-btn {
+    padding: 12px 30px;
+    font-size: 16px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #007cba, #005a87);
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+
+.wzq-start-btn:hover {
+    transform: translateY(-1px);
+}
 
 /* =============================================================
    3. QUESTION BLOCK
