@@ -143,10 +143,15 @@ function wzq_builder_ui($post) {
 }
 
 /* Add Question Button */
-.button.button-primary {
+.button.button-primary, .button.button-secondary {
     border-radius: 6px;
     padding: 8px 16px;
     border: none !important;
+}
+
+.button.button-secondary, .button.button-secondary:hover {
+    background: #6c757d;
+    color: #fff;
 }
 
 /* JSON Box */
@@ -346,7 +351,7 @@ function wzq_builder_ui($post) {
             </button>
 
             <!-- AI Review TXT -->
-            <button type="button" class="button button-primary" onclick="wzqExportAI()">
+            <button type="button" class="button button-secondary" onclick="wzqExportAI()">
                 🤖 AI Review TXT
             </button>
 
