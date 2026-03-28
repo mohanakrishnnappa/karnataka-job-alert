@@ -484,10 +484,9 @@
 }
 
 /* ✅ CUSTOM BUTTON */
-.wzq-custom-btn,
-.wzq-custom-btn:focus {
-    background: linear-gradient(135deg, #14b8a6, #0d9488);
-    color: #fff !important;
+.wzq-custom-btn {
+    background: linear-gradient(135deg, #ff9800, #e68900);
+    color: #fff;
 }
 
 /* ✅ RESTART BUTTON */
@@ -501,6 +500,13 @@
 /* ✅ REMOVE OLD OVERRIDES */
 .wzq-review-restart {
     margin: 0;
+}
+
+/* ✅ OPTIONAL HOVER EFFECT */
+.wzq-review-actions a:hover,
+.wzq-review-actions button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
 }
 
 /* Score time display */
