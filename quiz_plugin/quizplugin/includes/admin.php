@@ -757,19 +757,19 @@ add_action('save_post', function($post_id){
     // ✅ PRIORITY: JSON (if exists, ignore manual)
     if(!empty($_POST['wzq_json'])){
 
-        $data = json_decode(stripslashes($_POST['wzq_json']), true);
+        $data = json_decode(wp_unslash($_POST['wzq_json']), true);
 
         if(!empty($data['questions'])){
             foreach($data['questions'] as $i => $q){
                 $wpdb->insert($question_table, [
                     'quiz_id' => $quiz_id,
-                    'question' => trim(sanitize_textarea_field($q['question'])),
-                    'option_a' => sanitize_text_field($q['options']['a']),
-                    'option_b' => sanitize_text_field($q['options']['b']),
-                    'option_c' => sanitize_text_field($q['options']['c']),
-                    'option_d' => sanitize_text_field($q['options']['d']),
+                    'question' => sanitize_textarea_field(wp_unslash($q['question'])),
+                    'option_a' => sanitize_text_field(wp_unslash($q['options']['a'])),
+                    'option_b' => sanitize_text_field(wp_unslash($q['options']['b'])),
+                    'option_c' => sanitize_text_field(wp_unslash($q['options']['c'])),
+                    'option_d' => sanitize_text_field(wp_unslash($q['options']['d'])),
                     'correct' => sanitize_text_field($q['correct']),
-                    'explanation' => trim(sanitize_textarea_field($q['explanation'])),
+                    'explanation' => sanitize_textarea_field(wp_unslash($q['explanation'])),
                     'order_index' => $i
                 ]);
             }
@@ -780,11 +780,12 @@ add_action('save_post', function($post_id){
         // ✅ ONLY run manual if JSON is empty
         foreach($_POST['questions'] as $i => $q){
 
-            $question = trim($q['question'] ?? '');
-            $a = trim($q['a'] ?? '');
-            $b = trim($q['b'] ?? '');
-            $c = trim($q['c'] ?? '');
-            $d = trim($q['d'] ?? '');
+            $question = sanitize_textarea_field(wp_unslash($q['question'] ?? ''));
+            $a = sanitize_text_field(wp_unslash($q['a'] ?? ''));
+            $b = sanitize_text_field(wp_unslash($q['b'] ?? ''));
+            $c = sanitize_text_field(wp_unslash($q['c'] ?? ''));
+            $d = sanitize_text_field(wp_unslash($q['d'] ?? ''));
+            $exp = sanitize_textarea_field(wp_unslash($q['explanation'] ?? ''));
 
             // ❌ Skip if completely empty
             if(
@@ -810,13 +811,13 @@ add_action('save_post', function($post_id){
 
             $wpdb->insert($question_table, [
                 'quiz_id' => $quiz_id,
-                'question' => sanitize_textarea_field($question),
-                'option_a' => sanitize_text_field($a),
-                'option_b' => sanitize_text_field($b),
-                'option_c' => sanitize_text_field($c),
-                'option_d' => sanitize_text_field($d),
+                'question' => $question,
+                'option_a' => $a,
+                'option_b' => $b,
+                'option_c' => $c,
+                'option_d' => $d,
                 'correct' => sanitize_text_field($q['correct']),
-                'explanation' => trim(sanitize_textarea_field($q['explanation'] ?? '')),
+                'explanation' => $exp,
                 'order_index' => $i
             ]);
         }
