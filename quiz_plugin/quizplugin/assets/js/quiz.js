@@ -235,22 +235,34 @@ function submitQuiz(forceSubmit = false) {
         if (exp) exp.style.display = "block";
 
         let meta = q.querySelector(".wzq-q-meta");
-
         if (!meta) return;
 
         let tag = document.createElement("span");
         tag.classList.add("wzq-status-label");
 
+        const correct = q.querySelector(".wzq-option").dataset.correct;
+
+        // 👉 find selected option (correct or wrong)
+        const selected = q.querySelector(".wzq-option.correct, .wzq-option.wrong");
+
         if (q.classList.contains("answered")) {
-            tag.innerText = "Answered";
-            tag.classList.add("answered");
+
+            if (selected && selected.dataset.opt === correct) {
+                // ✅ Correct Answer
+                tag.innerText = "1 / 1";
+                tag.classList.add("wzq-correct-point");
+            } else {
+                // ❌ Wrong Answer
+                tag.innerText = "0 / 1";
+                tag.classList.add("wzq-wrong-point");
+            }
+
         } else {
+            // ⚠️ Not Answered
             tag.innerText = "Not Answered";
             tag.classList.add("unanswered");
 
             // highlight correct answer
-            const correct = q.querySelector(".wzq-option").dataset.correct;
-
             q.querySelectorAll(".wzq-option").forEach(opt => {
                 opt.disabled = true;
 

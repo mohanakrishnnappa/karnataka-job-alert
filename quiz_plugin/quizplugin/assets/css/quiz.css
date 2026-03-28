@@ -237,6 +237,20 @@
     cursor: default;
 }
 
+/* Answered question options — correct points */
+.wzq-correct-point {
+    background: #e6f7ec;
+    color: #1a7f37;
+    border: 1px solid #1a7f37;
+}
+
+/* Answered question options — wrong points */
+.wzq-wrong-point {
+    background: #fdecea;
+    color: #d93025;
+    border: 1px solid #d93025;
+}
+
 
 /* =============================================================
    6. OPTION ICONS (CORRECT / WRONG)
