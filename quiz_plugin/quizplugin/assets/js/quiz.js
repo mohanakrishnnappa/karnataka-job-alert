@@ -241,28 +241,22 @@ function submitQuiz(forceSubmit = false) {
         tag.classList.add("wzq-status-label");
 
         const correct = q.querySelector(".wzq-option").dataset.correct;
-
-        // 👉 find selected option (correct or wrong)
-        const selected = q.querySelector(".wzq-option.correct, .wzq-option.wrong");
+        const selected = q.dataset.selected;
 
         if (q.classList.contains("answered")) {
 
-            if (selected && selected.dataset.opt === correct) {
-                // ✅ Correct Answer
+            if (selected && selected === correct) {
                 tag.innerText = "1 / 1";
                 tag.classList.add("wzq-correct-point");
             } else {
-                // ❌ Wrong Answer
                 tag.innerText = "0 / 1";
                 tag.classList.add("wzq-wrong-point");
             }
 
         } else {
-            // ⚠️ Not Answered
             tag.innerText = "Not Answered";
             tag.classList.add("unanswered");
 
-            // highlight correct answer
             q.querySelectorAll(".wzq-option").forEach(opt => {
                 opt.disabled = true;
 
@@ -373,6 +367,9 @@ document.querySelectorAll(".wzq-option").forEach(btn => {
         parent.querySelectorAll(".wzq-option").forEach(opt => {
             opt.disabled = true;
         });
+
+        // ✅ SAVE USER ANSWER
+        parent.dataset.selected = this.dataset.opt;
 
         if (this.dataset.opt === correct) {
             this.classList.add("correct");
