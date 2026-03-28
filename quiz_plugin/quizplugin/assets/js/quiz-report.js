@@ -22,31 +22,55 @@ function showMsg(text, type = "success") {
 // 👉 OPEN MODAL
 document.addEventListener("click", function (e) {
     if (!e.target.classList.contains("wzq-report")) return;
+
     const btn = e.target;
     const q = btn.closest(".wzq-question");
+
     currentReportBtn = btn;
     currentReportQ = q;
+
+    // 🔁 reset form
     reportText.value = "";
     reportReason.value = "";
-    // ✅ reset message
+
+    // 🔁 reset message
     reportMsg.className = "wzq-report-msg";
     reportMsg.innerText = "";
+
+    // 🔥 IMPORTANT: reset submit button
+    reportSubmit.disabled = false;
+    reportSubmit.innerText = "Submit";
+
     reportModal.classList.add("show");
 });
 
 // ❌ Cancel
 reportCancel.addEventListener("click", () => {
     reportModal.classList.remove("show");
+
+    // 🔁 reset button
+    reportSubmit.disabled = false;
+    reportSubmit.innerText = "Submit";
 });
 
 // ✅ Submit
 reportSubmit.addEventListener("click", () => {
+
+    // 🚫 prevent double click
+    if (reportSubmit.disabled) return;
+
+    reportSubmit.disabled = true;
+    reportSubmit.innerText = "Submitting...";
 
     const reason = reportReason.value;
     const extra = reportText.value.trim();
 
     if (!reason) {
         showMsg("Please select issue ⚠️", "warning");
+
+        // 🔁 re-enable if validation fails
+        reportSubmit.disabled = false;
+        reportSubmit.innerText = "Submit";
         return;
     }
 
@@ -86,11 +110,19 @@ reportSubmit.addEventListener("click", () => {
 
             } else {
                 showMsg("Error: " + res, "error");
+
+                // 🔁 re-enable if server error
+                reportSubmit.disabled = false;
+                reportSubmit.innerText = "Submit";
             }
 
         })
         .catch(err => {
             console.error(err);
+
+            // 🔁 re-enable on failure
+            reportSubmit.disabled = false;
+            reportSubmit.innerText = "Submit";
         });
 
 });
