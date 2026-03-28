@@ -5,7 +5,9 @@ Description: Advanced MCQ Quiz Plugin
 Version: 1.0
 */
 
-if (!defined('ABSPATH')) exit;
+if (!defined('ABSPATH')) {
+    exit;
+}
 
 define('WZQ_PATH', plugin_dir_path(__FILE__));
 define('WZQ_URL', plugin_dir_url(__FILE__));

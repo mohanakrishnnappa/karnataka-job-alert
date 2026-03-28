@@ -1,5 +1,9 @@
 <?php
 
+if (!defined('ABSPATH')) {
+    exit;
+}
+
 add_shortcode('wz_quiz', function($atts){
 
     global $wpdb;

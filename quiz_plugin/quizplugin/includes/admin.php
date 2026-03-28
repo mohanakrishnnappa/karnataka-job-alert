@@ -1,5 +1,9 @@
 <?php
 
+if (!defined('ABSPATH')) {
+    exit;
+}
+
 add_action('add_meta_boxes', function() {
     add_meta_box('wzq_builder', 'Quiz Builder', 'wzq_builder_ui', 'wz_quiz');
 });

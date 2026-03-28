@@ -1,5 +1,9 @@
 <?php
 
+if (!defined('ABSPATH')) {
+    exit;
+}
+
 add_action('wp_ajax_wzq_report_question', 'wzq_report_question');
 add_action('wp_ajax_nopriv_wzq_report_question', 'wzq_report_question');
 

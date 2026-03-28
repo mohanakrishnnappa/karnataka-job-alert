@@ -1,5 +1,9 @@
 <?php
 
+if (!defined('ABSPATH')) {
+    exit;
+}
+
 function wzq_create_tables() {
     global $wpdb;
 

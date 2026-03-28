@@ -1,5 +1,9 @@
 <?php
 
+if (!defined('ABSPATH')) {
+    exit;
+}
+
 add_action('init', function() {
 
     register_post_type('wz_quiz', [
