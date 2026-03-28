@@ -5,6 +5,10 @@ quizplugin/
 │   ├── js
 │   │   ├── quiz-report.js
 │   │   └── quiz.js
+│   ├── sounds
+│   │   ├── correct.mp3
+│   │   ├── finish.mp3
+│   │   └── wrong.mp3
 ├── includes
 │   ├── admin-qpreport.php
 │   ├── admin.php
