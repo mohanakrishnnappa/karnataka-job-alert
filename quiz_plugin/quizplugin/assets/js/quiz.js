@@ -396,3 +396,32 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 });
+
+document.querySelectorAll(".wzq-report").forEach(btn => {
+
+    btn.addEventListener("click", function () {
+
+        const q = this.closest(".wzq-question");
+        const questionText = q.querySelector(".wzq-question-text").innerText;
+
+        const issue = prompt("What is wrong with this question?");
+        if (!issue) return;
+
+        fetch(wzq_ajax.url, {
+            method: "POST",
+            headers: { "Content-Type": "application/x-www-form-urlencoded" },
+            body: new URLSearchParams({
+                action: "wzq_report_question",
+                question: questionText,
+                issue: issue,
+                quiz_id: wrapper.dataset.quiz
+            })
+        })
+            .then(res => res.text())
+            .then(() => {
+                alert("Reported successfully ✅");
+            });
+
+    });
+
+});

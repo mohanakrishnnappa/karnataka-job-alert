@@ -21,3 +21,7 @@ add_action('wp_enqueue_scripts', function() {
     wp_enqueue_style('wzq-css', WZQ_URL . 'assets/css/quiz.css');
     wp_enqueue_script('wzq-js', WZQ_URL . 'assets/js/quiz.js', [], false, true);
 });
+
+wp_localize_script('wzq-js', 'wzq_ajax', [
+    'url' => admin_url('admin-ajax.php')
+]);

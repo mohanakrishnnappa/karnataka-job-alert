@@ -32,6 +32,17 @@ function wzq_create_tables() {
         order_index INT
     ) $charset;";
 
+    $sql3 = "CREATE TABLE {$wpdb->prefix}wz_reports (
+        id BIGINT AUTO_INCREMENT PRIMARY KEY,
+        quiz_id BIGINT,
+        question_id BIGINT,
+        question_text TEXT,
+        issue TEXT,
+        user_ip VARCHAR(50),
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+    ) $charset;";
+
     dbDelta($sql1);
     dbDelta($sql2);
+    dbDelta($sql3);
 }

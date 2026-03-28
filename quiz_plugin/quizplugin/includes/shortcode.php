@@ -73,6 +73,10 @@ add_shortcode('wz_quiz', function($atts){
 
             </div>
 
+            <div class="wzq-actions">
+                <button class="wzq-report">🚩 Report</button>
+            </div>
+
             <div class="wzq-explanation">
                 <span class="wzq-expl-title">Explanation:</span>
                 <?php echo $q->explanation; ?>

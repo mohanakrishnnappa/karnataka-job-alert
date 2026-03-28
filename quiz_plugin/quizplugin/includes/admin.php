@@ -717,3 +717,55 @@ add_action('save_post', function($post_id){
     }
 
 });
+
+add_action('wp_ajax_wzq_report_question', 'wzq_report_question');
+add_action('wp_ajax_nopriv_wzq_report_question', 'wzq_report_question');
+
+function wzq_report_question(){
+
+    global $wpdb;
+
+    $table = $wpdb->prefix . 'wz_reports';
+
+    $wpdb->insert($table, [
+        'quiz_id' => intval($_POST['quiz_id']),
+        'question_text' => sanitize_textarea_field($_POST['question']),
+        'issue' => sanitize_textarea_field($_POST['issue']),
+        'user_ip' => $_SERVER['REMOTE_ADDR']
+    ]);
+
+    wp_die();
+}
+
+add_action('admin_menu', function(){
+    add_menu_page(
+        'Quiz Reports',
+        'Quiz Reports',
+        'manage_options',
+        'wzq-reports',
+        'wzq_reports_page',
+        'dashicons-warning'
+    );
+});
+
+function wzq_reports_page(){
+
+    global $wpdb;
+
+    $table = $wpdb->prefix . 'wz_reports';
+
+    $reports = $wpdb->get_results("SELECT * FROM $table ORDER BY created_at DESC");
+
+    echo "<div class='wrap'><h1>🚩 Reported Questions</h1>";
+
+    foreach($reports as $r){
+
+        echo "<div style='background:#fff;padding:15px;margin-bottom:10px;border:1px solid #ddd'>";
+        echo "<strong>Question:</strong><br>".$r->question_text."<br><br>";
+        echo "<strong>Issue:</strong><br>".$r->issue."<br><br>";
+        echo "<small>IP: ".$r->user_ip." | ".$r->created_at."</small>";
+        echo "</div>";
+    }
+
+    echo "</div>";
+}
