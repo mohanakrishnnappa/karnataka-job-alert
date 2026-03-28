@@ -38,10 +38,6 @@
     line-height: 1.5;
 }
 
-.wzq-review-mode .wzq-question-text {
-    margin-bottom: 10px;
-}
-
 .wzq-q-number {
     color: #fff;
     background: #007cba;
@@ -422,42 +418,6 @@
     margin: 30px auto 10px;
 }
 
-/* HEADER WRAPPER */
-.wzq-q-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    gap: 10px;
-}
-
-/* keep question text natural */
-.wzq-q-header>*:first-child {
-    flex: 1;
-}
-
-/* report button right */
-.wzq-actions {
-    flex-shrink: 0;
-}
-
-.wzq-actions {
-    display: flex;
-}
-
-.wzq-report {
-    background: #fff3f3;
-    border: 1px solid #ff4d4f;
-    color: #d9363e;
-    padding: 4px 10px;
-    font-size: 12px;
-    border-radius: 6px;
-    cursor: pointer;
-}
-
-.wzq-report:hover {
-    background: #ffeaea;
-}
-
 /* Report Button */
 .wzq-report {
     background: #fdecea;
@@ -487,14 +447,12 @@
     opacity: 0.9;
 }
 
-/* 🌑 BACKDROP */
 .wzq-modal {
     display: none;
     position: fixed;
-    inset: 0;
     z-index: 9999;
-    background: rgba(15, 23, 42, 0.55);
-    backdrop-filter: blur(6px);
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
     align-items: center;
     justify-content: center;
 }
@@ -503,83 +461,33 @@
     display: flex;
 }
 
-/* 📦 MODAL CARD */
 .wzq-modal-content {
-    background: #ffffff;
-    border-radius: 16px;
-    width: 420px;
-    max-width: 92%;
-    padding: 22px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
-    animation: wzqModalIn 0.25s ease;
-}
-
-/* ✨ ANIMATION */
-@keyframes wzqModalIn {
-    from {
-        opacity: 0;
-        transform: translateY(20px) scale(0.97);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
-}
-
-/* 🧠 HEADER */
-.wzq-modal-content h3 {
-    font-size: 20px;
-    font-weight: 700;
-    margin-bottom: 12px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-/* 🎯 SELECT */
-#wzq-report-reason {
-    width: 100%;
-    padding: 10px 12px;
-    border-radius: 10px;
-    border: 1px solid #e5e7eb;
-    margin-top: 8px;
-    font-size: 14px;
-    background: #f9fafb;
-    transition: all 0.2s ease;
-}
-
-#wzq-report-reason:focus {
-    outline: none;
-    border-color: #007cba;
     background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    width: 400px;
+    max-width: 90%;
 }
 
-/* ✍️ TEXTAREA */
+.wzq-modal-actions {
+    margin-top: 15px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
 #wzq-report-text {
     width: 100%;
-    height: 90px;
+    height: 100px;
     margin-top: 10px;
-    padding: 10px 12px;
-    border-radius: 10px;
-    border: 1px solid #e5e7eb;
-    font-size: 14px;
-    background: #f9fafb;
-    transition: all 0.2s ease;
+    padding: 10px;
 }
 
-#wzq-report-text:focus {
-    outline: none;
-    border-color: #007cba;
-    background: #fff;
-}
-
-/* ⚠️ MESSAGE */
 .wzq-report-msg {
     margin-top: 10px;
-    font-size: 13px;
-    padding: 8px 10px;
-    border-radius: 8px;
+    font-size: 14px;
+    padding: 8px;
+    border-radius: 6px;
     display: none;
 }
 
@@ -600,53 +508,6 @@
 .wzq-report-msg.warning {
     background: #fff3cd;
     color: #856404;
-}
-
-/* 🔘 ACTIONS */
-.wzq-modal-actions {
-    margin-top: 16px;
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-}
-
-/* ❌ CANCEL BUTTON */
-#wzq-report-cancel {
-    padding: 8px 14px;
-    border-radius: 8px;
-    border: none;
-    background: #e5e7eb;
-    color: #333;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-#wzq-report-cancel:hover {
-    background: #d1d5db;
-}
-
-/* ✅ SUBMIT BUTTON */
-#wzq-report-submit {
-    padding: 8px 16px;
-    border-radius: 8px;
-    border: none;
-    background: linear-gradient(135deg, #007cba, #005a87);
-    color: #fff;
-    font-weight: 600;
-    cursor: pointer;
-    transition: 0.2s;
-}
-
-#wzq-report-submit:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 6px 14px rgba(0, 123, 186, 0.25);
-}
-
-/* 🔒 DISABLED */
-#wzq-report-submit:disabled {
-    background: #9ca3af;
-    cursor: not-allowed;
-    box-shadow: none;
 }
 
 /* 🎯 HEADER TOP (TEXT + TIMER) */

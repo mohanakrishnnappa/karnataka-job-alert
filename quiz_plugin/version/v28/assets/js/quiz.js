@@ -204,28 +204,8 @@ function submitQuiz(forceSubmit = false) {
 
         actionBox.appendChild(btn);
 
-        // 👉 place near question title (right side)
-        let title = q.querySelector(".wzq-question-text");
-
-        if (title) {
-
-            // create header wrapper
-            let header = document.createElement("div");
-            header.className = "wzq-q-header";
-
-            // clone title content
-            let titleClone = title.cloneNode(true);
-
-            // clear original
-            title.innerHTML = "";
-
-            // move content inside wrapper
-            header.appendChild(titleClone);
-            header.appendChild(actionBox);
-
-            // append back
-            title.appendChild(header);
-        }
+        // 👉 place after explanation OR at bottom
+        q.appendChild(actionBox);
     });
 
     // 🎯 HANDLE UNANSWERED QUESTIONS
