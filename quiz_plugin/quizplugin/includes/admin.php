@@ -218,6 +218,8 @@ function wzq_builder_ui($post) {
 }
 </style>
 
+<input type="hidden" id="wzq-quiz-title" value="<?php echo esc_attr(get_the_title($post->ID)); ?>">
+
 <div class="wzq-tabs">
     <button type="button" onclick="wzqShowTab('manual', this)">➕ Manual Add</button>
     <button type="button" onclick="wzqShowTab('import', this)">📥 Import JSON</button>
@@ -337,14 +339,23 @@ function wzq_builder_ui($post) {
         <hr>
 
         <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+
+            <!-- Export JSON -->
             <button type="button" class="button button-primary" onclick="wzqExportJSON()">
                 ⬇️ Export JSON
             </button>
 
+            <!-- AI Review TXT -->
+            <button type="button" class="button button-primary" onclick="wzqExportAI()">
+                🤖 AI Review TXT
+            </button>
+
+            <!-- Shortcode -->
             <input type="text" readonly 
                 value="[wz_quiz id='<?php echo $post->ID; ?>']"
                 style="flex:1;min-width:250px;font-family:monospace;"
                 onclick="this.select();">
+
         </div>
 
         <hr>
@@ -554,6 +565,76 @@ function wzqExportJSON() {
     a.href = url;
     a.download = "quiz-" + Date.now() + ".json";
     a.click();
+
+    URL.revokeObjectURL(url);
+}
+
+// Export Questions as TXT for AI Review
+function wzqExportAI() {
+
+    const quizTitle = document.getElementById("wzq-quiz-title")?.value || "this subject";
+
+let output = `You are an expert in ${quizTitle}.
+
+Verify all questions below one by one.
+
+Instructions:
+- Check if question is correct
+- Verify correct answer
+- Verify explanation
+- If wrong, correct it
+- Keep answers short and structured
+
+---
+
+`;
+
+    let count = 1;
+
+    document.querySelectorAll('#wzq-questions .wzq-question-box').forEach(box => {
+
+        const q = box.querySelector('textarea[name*="[question]"]')?.value.trim();
+        const a = box.querySelector('input[name*="[a]"]')?.value.trim();
+        const b = box.querySelector('input[name*="[b]"]')?.value.trim();
+        const c = box.querySelector('input[name*="[c]"]')?.value.trim();
+        const d = box.querySelector('input[name*="[d]"]')?.value.trim();
+        const correct = box.querySelector('select')?.value.toUpperCase();
+        const exp = box.querySelector('textarea[name*="[explanation]"]')?.value.trim();
+
+        if (!q) return;
+
+        output += `### Question ${count}\n\n`;
+
+        output += `Question:\n${q}\n\n`;
+
+        output += `Options:\n`;
+        output += `A) ${a}\n`;
+        output += `B) ${b}\n`;
+        output += `C) ${c}\n`;
+        output += `D) ${d}\n\n`;
+
+        output += `Correct Answer Given: ${correct}\n\n`;
+
+        output += `Explanation:\n${exp}\n\n`;
+
+        output += `---\n\n`;
+
+        count++;
+    });
+
+    output += `Output Format:
+- Is Correct: Yes / No  
+- Correct Answer: (A/B/C/D)  
+- Explanation: (corrected or improved explanation)  
+- Notes: (if any mistake found)`;
+
+    const blob = new Blob([output], { type: "text/plain" });
+    const url = URL.createObjectURL(blob);
+
+    const aTag = document.createElement("a");
+    aTag.href = url;
+    aTag.download = "quiz-ai-review-" + Date.now() + ".txt";
+    aTag.click();
 
     URL.revokeObjectURL(url);
 }
