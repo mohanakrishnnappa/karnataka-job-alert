@@ -36,9 +36,21 @@ add_shortcode('wz_quiz', function($atts){
      data-quiz="<?php echo $quiz->id; ?>">
 
     <div class="wzq-start-screen">
-        <h3 class="wzq-quiz-title"><?php echo get_the_title($post_id); ?></h3>
 
-        <button class="wzq-start-btn">▶ Start Quiz</button>
+        <div class="wzq-q-header">
+            <div class="wzq-q-meta">
+                <span class="wzq-status-label answered">Quiz Ready</span>
+            </div>
+
+            <h2 class="wzq-question-text">
+                <?php echo get_the_title($post_id); ?>
+            </h2>
+        </div>
+
+        <div class="wzq-options">
+            <button class="wzq-start-btn">▶ Start Quiz</button>
+        </div>
+
     </div>
 
     <div class="wzq-card" style="display:none;">
