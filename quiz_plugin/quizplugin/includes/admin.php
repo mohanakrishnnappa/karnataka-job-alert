@@ -263,7 +263,7 @@ function wzq_builder_ui($post) {
                 </select>
 
                 <p>Explanation</p>
-                <textarea name="questions[<?php echo $i; ?>][explanation]" style="width:100%"><?php echo esc_textarea($q->explanation); ?></textarea>
+                <textarea name="questions[<?php echo $i; ?>][explanation]" rows="5" style="width:100%"><?php echo esc_textarea($q->explanation); ?></textarea>
 
                 <button type="button" onclick="wzqRemoveQuestion(this)">❌ Remove</button>
 
