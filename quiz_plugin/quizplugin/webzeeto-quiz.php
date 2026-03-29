@@ -46,3 +46,22 @@ add_action('wp_enqueue_scripts', function() {
         ]
     ]);
 });
+
+add_filter('template_include', function($template) {
+
+    // ✅ Check if it's quiz archive (/quiz/)
+    if (is_post_type_archive('wz_quiz')) {
+
+        // 1️⃣ Allow theme override (future-proof)
+        $theme_template = locate_template('archive-wz_quiz.php');
+
+        if ($theme_template) {
+            return $theme_template;
+        }
+
+        // 2️⃣ Load your custom plugin template (archive-cpt.php)
+        return WZQ_PATH . 'templates/archive-cpt.php';
+    }
+
+    return $template;
+});
