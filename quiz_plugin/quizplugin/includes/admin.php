@@ -628,6 +628,7 @@ Instructions:
     });
 
     output += `Output Format:
+- Any Typing mistake? Yes / No
 - Is Correct: Yes / No  
 - Correct Answer: (A/B/C/D)  
 - Explanation: (corrected or improved explanation)  
