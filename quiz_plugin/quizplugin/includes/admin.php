@@ -431,13 +431,6 @@ function wzqAddQuestion(){
     container.insertAdjacentHTML('beforeend', wzqBuildQuestionHTML(index));
 }
 
-document.addEventListener("DOMContentLoaded", function () {
-    const firstTabBtn = document.querySelector('.wzq-tabs button');
-    if (firstTabBtn) {
-        wzqShowTab('manual', firstTabBtn);
-    }
-});
-
 function wzqImportJSON() {
 
     const textarea = document.querySelector('[name="wzq_json"]');
@@ -607,31 +600,45 @@ Instructions:
 
 document.addEventListener("DOMContentLoaded", function () {
 
-    document.getElementById('wzq-confirm-yes').onclick = function(){
+    // ✅ Init first tab
+    const firstTabBtn = document.querySelector('.wzq-tabs button');
+    if (firstTabBtn) {
+        wzqShowTab('manual', firstTabBtn);
+    }
 
-        if(!wzqDeleteTarget) return;
+    // ✅ Delete modal - YES
+    const confirmYes = document.getElementById('wzq-confirm-yes');
+    if (confirmYes) {
+        confirmYes.onclick = function(){
 
-        const box = wzqDeleteTarget.closest('.wzq-question-box');
-        box.remove();
+            if(!wzqDeleteTarget) return;
 
-        // Re-index
-        document.querySelectorAll('#wzq-questions .wzq-question-box').forEach((box, i) => {
+            const box = wzqDeleteTarget.closest('.wzq-question-box');
+            box.remove();
 
-            const title = box.querySelector('strong');
-            if(title){
-                title.innerText = "Question " + String(i+1).padStart(2,'0') + ":";
-            }
+            // Re-index
+            document.querySelectorAll('#wzq-questions .wzq-question-box').forEach((box, i) => {
 
-            box.querySelectorAll('textarea, input, select').forEach(el => {
-                el.name = el.name.replace(/questions\[\d+\]/, 'questions['+i+']');
+                const title = box.querySelector('strong');
+                if(title){
+                    title.innerText = "Question " + String(i+1).padStart(2,'0') + ":";
+                }
+
+                box.querySelectorAll('textarea, input, select').forEach(el => {
+                    el.name = el.name.replace(/questions\[\d+\]/, 'questions['+i+']');
+                });
+
             });
 
-        });
+            closeModal();
+        };
+    }
 
-        closeModal();
-    };
-
-    document.getElementById('wzq-confirm-no').onclick = closeModal;
+    // ✅ Delete modal - NO
+    const confirmNo = document.getElementById('wzq-confirm-no');
+    if (confirmNo) {
+        confirmNo.onclick = closeModal;
+    }
 
 });
 
@@ -742,17 +749,6 @@ add_action('save_post', function($post_id){
             $c = sanitize_text_field(wp_unslash($q['c'] ?? ''));
             $d = sanitize_text_field(wp_unslash($q['d'] ?? ''));
             $exp = sanitize_textarea_field(wp_unslash($q['explanation'] ?? ''));
-
-            // ❌ Skip if completely empty
-            if(
-                $question === '' &&
-                $a === '' &&
-                $b === '' &&
-                $c === '' &&
-                $d === ''
-            ){
-                continue;
-            }
 
             // ❌ Optional: Skip if question OR options incomplete
             if(
