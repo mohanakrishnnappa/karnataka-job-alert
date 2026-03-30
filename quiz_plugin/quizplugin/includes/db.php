@@ -35,10 +35,10 @@ function wzq_get_questions($quiz_id) {
 
 function wzq_get_question_count($quiz_id) {
     global $wpdb;
-    $quiz_id = (int) $quiz_id;
+
     return (int) $wpdb->get_var(
         $wpdb->prepare(
-            "SELECT COUNT(*) FROM " . WZQ_TABLE_QUESTIONS . " WHERE quiz_id = %d",
+            "SELECT total_questions FROM " . WZQ_TABLE_QUIZZES . " WHERE id = %d",
             $quiz_id
         )
     );
@@ -61,6 +61,7 @@ function wzq_create_tables() {
         ad_after INT,
         custom_btn_text VARCHAR(255),
         custom_btn_link TEXT,
+        total_questions INT DEFAULT 0,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 
         KEY idx_post_id (post_id)

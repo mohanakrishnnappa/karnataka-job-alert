@@ -14,12 +14,7 @@ add_shortcode('wz_quiz', function($atts){
 
     global $wpdb;
 
-    $total_questions = $wpdb->get_var(
-        $wpdb->prepare(
-            "SELECT COUNT(*) FROM " . WZQ_TABLE_QUESTIONS . " WHERE quiz_id = %d",
-            $quiz->id
-        )
-    );
+    $total_questions = $quiz->total_questions;
 
     ob_start();
 ?>

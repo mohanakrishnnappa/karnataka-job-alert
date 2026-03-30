@@ -712,7 +712,8 @@ add_action('save_post', function($post_id){
         'random_order' => intval($settings['random_order'] ?? 0),
         'ad_after' => intval($settings['ad_after'] ?? 3),
         'custom_btn_text' => sanitize_text_field($settings['custom_btn_text'] ?? ''),
-        'custom_btn_link' => esc_url_raw($settings['custom_btn_link'] ?? '')
+        'custom_btn_link' => esc_url_raw($settings['custom_btn_link'] ?? ''),
+        'total_questions' => 0
     ]);
 
     $quiz_id = $wpdb->insert_id;
@@ -723,6 +724,7 @@ add_action('save_post', function($post_id){
         $data = json_decode(wp_unslash($_POST['wzq_json']), true);
 
         if(!empty($data['questions'])){
+            $count = 0;
             foreach($data['questions'] as $i => $q){
                 $wpdb->insert( WZQ_TABLE_QUESTIONS, [
                     'quiz_id' => $quiz_id,
@@ -735,11 +737,12 @@ add_action('save_post', function($post_id){
                     'explanation' => sanitize_textarea_field(wp_unslash($q['explanation'])),
                     'order_index' => $i
                 ]);
+                $count++;
             }
         }
 
     } elseif(!empty($_POST['questions'])) {
-
+        $count = 0;
         // ✅ ONLY run manual if JSON is empty
         foreach($_POST['questions'] as $i => $q){
 
@@ -766,7 +769,16 @@ add_action('save_post', function($post_id){
                 'explanation' => $exp,
                 'order_index' => $i
             ]);
+            $count++;
         }
+    }
+
+    if (isset($count)) {
+        $wpdb->update(
+            WZQ_TABLE_QUIZZES,
+            ['total_questions' => $count],
+            ['id' => $quiz_id]
+        );
     }
 
 });
