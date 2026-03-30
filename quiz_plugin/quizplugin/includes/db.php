@@ -76,13 +76,11 @@ function wzq_create_tables() {
     $sql3 = "CREATE TABLE " . WZQ_TABLE_REPORTS . " (
         id BIGINT AUTO_INCREMENT PRIMARY KEY,
         quiz_id BIGINT,
-        question_id BIGINT,
         question_text TEXT,
         issue TEXT,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 
         KEY idx_quiz_id (quiz_id),
-        KEY idx_question_id (question_id),
         KEY idx_created (created_at)
 
     ) $charset;";
