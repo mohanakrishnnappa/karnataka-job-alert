@@ -111,75 +111,118 @@ document.addEventListener("click", async function (e) {
     function generateCertificate(name, score, total, quizTitle) {
 
         const canvas = document.createElement("canvas");
-        canvas.width = 1200;
-        canvas.height = 850;
+        canvas.width = 1400;
+        canvas.height = 1000;
 
         const ctx = canvas.getContext("2d");
 
-        // Background
-        ctx.fillStyle = "#fff";
-        ctx.fillRect(0, 0, canvas.width, canvas.height); // ✅ ADD THIS
+        // 🎨 BACKGROUND (soft gradient)
+        const grad = ctx.createLinearGradient(0, 0, 1400, 1000);
+        grad.addColorStop(0, "#fdfcfb");
+        grad.addColorStop(1, "#e2d1c3");
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        // Border
+        // 🟡 DOUBLE BORDER (premium look)
         ctx.strokeStyle = "#d4af37";
-        ctx.lineWidth = 10;
-        ctx.strokeRect(20, 20, 1160, 810);
+        ctx.lineWidth = 8;
+        ctx.strokeRect(30, 30, 1340, 940);
+
+        ctx.strokeStyle = "#000";
+        ctx.lineWidth = 2;
+        ctx.strokeRect(50, 50, 1300, 900);
 
         ctx.textAlign = "center";
 
-        // Title
-        ctx.font = "bold 48px Arial";
-        ctx.fillStyle = "#000";
-        ctx.fillText("Certificate of Achievement", 600, 140);
+        // 🏆 TITLE
+        ctx.font = "bold 60px Arial";
+        ctx.fillStyle = "#222";
+        ctx.fillText("CERTIFICATE", 700, 180);
 
-        // Name
-        ctx.font = "bold 42px Arial";
-        ctx.fillStyle = "#000";
-        ctx.fillText(name, 600, 320);
+        ctx.font = "28px Arial";
+        ctx.fillStyle = "#555";
+        ctx.fillText("OF ACHIEVEMENT", 700, 230);
 
-        // Text
+        // 📜 Subtitle
         ctx.font = "24px Arial";
-        ctx.fillStyle = "#000"; // white text
-        ctx.fillText("has successfully completed", 600, 380);
-        ctx.fillText(quizTitle, 600, 430);
-        ctx.fillText(`Score: ${score}/${total}`, 600, 480);
+        ctx.fillStyle = "#444";
+        ctx.fillText("This is proudly presented to", 700, 320);
 
-        // Date
-        ctx.fillText(new Date().toLocaleDateString(), 600, 540);
+        // 🧑 NAME (highlight)
+        ctx.font = "bold 56px Arial";
+        ctx.fillStyle = "#000";
+        ctx.fillText(name, 700, 420);
 
-        // 🟡 Seal
+        // underline name
         ctx.beginPath();
-        ctx.arc(950, 650, 60, 0, Math.PI * 2);
+        ctx.moveTo(450, 440);
+        ctx.lineTo(950, 440);
+        ctx.strokeStyle = "#d4af37";
+        ctx.lineWidth = 2;
+        ctx.stroke();
+
+        // 📚 Description
+        ctx.font = "26px Arial";
+        ctx.fillStyle = "#333";
+        ctx.fillText("for successfully completing the quiz", 700, 520);
+
+        ctx.font = "bold 32px Arial";
+        ctx.fillStyle = "#000";
+        ctx.fillText(quizTitle, 700, 580);
+
+        // 🎯 Score box
+        ctx.fillStyle = "#fff";
+        ctx.fillRect(550, 630, 300, 70);
+
+        ctx.strokeStyle = "#d4af37";
+        ctx.strokeRect(550, 630, 300, 70);
+
+        ctx.font = "bold 28px Arial";
+        ctx.fillStyle = "#000";
+        ctx.fillText(`Score: ${score}/${total}`, 700, 675);
+
+        // 📅 Date
+        ctx.font = "20px Arial";
+        ctx.fillStyle = "#444";
+        ctx.fillText(new Date().toLocaleDateString(), 700, 750);
+
+        // 🟡 GOLD SEAL (improved)
+        ctx.beginPath();
+        ctx.arc(1100, 780, 70, 0, Math.PI * 2);
         ctx.fillStyle = "#d4af37";
         ctx.fill();
 
         ctx.fillStyle = "#000";
-        ctx.font = "bold 14px Arial";
-        ctx.fillText("CERTIFIED", 950, 655);
+        ctx.font = "bold 16px Arial";
+        ctx.fillText("CERTIFIED", 1100, 785);
 
-        // ✍️ Signature
-        ctx.font = "italic 28px cursive";
-        ctx.fillText("Mohana Krishnnappa", 250, 700);
+        // ✍️ SIGNATURE
+        ctx.font = "italic 32px cursive";
+        ctx.fillStyle = "#000";
+        ctx.fillText("Mohana Krishnnappa", 300, 820);
 
-        ctx.font = "16px Arial";
-        ctx.fillText("Founder", 250, 740);
+        ctx.font = "18px Arial";
+        ctx.fillText("Founder", 300, 860);
 
-        // Download
-        const link = document.createElement("a");
-        link.download = "certificate.png";
-        link.href = canvas.toDataURL();
+        // line above signature
+        ctx.beginPath();
+        ctx.moveTo(180, 800);
+        ctx.lineTo(420, 800);
+        ctx.strokeStyle = "#000";
+        ctx.lineWidth = 1;
+        ctx.stroke();
 
-        document.body.appendChild(link); // 🔥 REQUIRED
-        setTimeout(() => {
-            link.click();
-        }, 100);
-        document.body.removeChild(link);
-
-        window.generatedCert = canvas.toDataURL();
-
+        // 📥 DOWNLOAD
         const image = canvas.toDataURL("image/png");
 
-        // 🔥 VERY IMPORTANT
+        const link = document.createElement("a");
+        link.download = "certificate.png";
+        link.href = image;
+
+        document.body.appendChild(link);
+        setTimeout(() => link.click(), 100);
+        document.body.removeChild(link);
+
         window.generatedCert = image;
 
         return image;
