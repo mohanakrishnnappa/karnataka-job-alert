@@ -5,8 +5,6 @@ document.addEventListener("click", function (e) {
 
     const cat = btn.dataset.cat;
 
-    console.log("CLICK:", cat);
-
     document.querySelectorAll(".wzq-filter-btn").forEach(b => b.classList.remove("active"));
     btn.classList.add("active");
 
@@ -42,7 +40,6 @@ document.addEventListener("click", function (e) {
     })
         .then(res => res.text())
         .then(html => {
-            console.log("RESPONSE:", html);
             container.innerHTML = html;
         })
         .catch(err => console.error(err));

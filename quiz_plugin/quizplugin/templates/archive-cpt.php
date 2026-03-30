@@ -183,13 +183,13 @@ div.wzq-fullwidth {
 
         if (!empty($terms)) {
 
-            $current_cat = $_GET['cat'] ?? '';
+            $current_cat = isset($_GET['cat']) ? sanitize_text_field($_GET['cat']) : '';
 
             echo "<div class='wzq-filters'>";
 
             // ✅ All button
             $active_class = empty($current_cat) ? 'active' : '';
-            echo "<button class='wzq-filter-btn active' data-cat=''>All</button>";
+            echo "<button class='wzq-filter-btn $active_class' data-cat=''>All</button>";
 
             // ✅ Category buttons
             foreach ($terms as $term) {
