@@ -117,173 +117,189 @@ document.addEventListener("click", async function (e) {
 
         const ctx = canvas.getContext("2d");
 
-        // 🎨 BACKGROUND
-        const grad = ctx.createLinearGradient(0, 0, 1400, 1000);
-        grad.addColorStop(0, "#fdfcfb");
-        grad.addColorStop(1, "#e2d1c3");
-        ctx.fillStyle = grad;
+        // 🎨 WHITE BACKGROUND
+        ctx.fillStyle = "#ffffff";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-        // 🟡 DOUBLE BORDER
-        ctx.strokeStyle = "#d4af37";
-        ctx.lineWidth = 8;
-        ctx.strokeRect(30, 30, 1340, 940);
+        // 🖼️ LOGO WATERMARK
+        const logo = new Image();
+        logo.src = wzq_cert.logo;
 
-        ctx.strokeStyle = "#000";
-        ctx.lineWidth = 2;
-        ctx.strokeRect(50, 50, 1300, 900);
+        let done = false;
 
-        ctx.textAlign = "center";
+        function drawAll() {
 
-        // 🏆 TITLE
-        ctx.font = "bold 60px Arial";
-        ctx.fillStyle = "#222";
-        ctx.fillText("CERTIFICATE", 700, 180);
+            if (done) return;
+            done = true;
 
-        ctx.font = "28px Arial";
-        ctx.fillStyle = "#555";
-        ctx.fillText("OF ACHIEVEMENT", 700, 230);
+            // draw watermark only if loaded
+            if (logo.complete && logo.naturalWidth !== 0) {
 
-        // 📜 Subtitle
-        ctx.font = "24px Arial";
-        ctx.fillStyle = "#444";
-        ctx.fillText("This is proudly presented to", 700, 320);
+                ctx.globalAlpha = 0.06;
 
-        // 🧑 NAME + TOP/BOTTOM BORDER
-        ctx.font = "bold 56px Verdana";
-        ctx.fillStyle = "#ef2c6d";
+                const size = 512;
 
-        // 🔝 TOP LINE
-        ctx.beginPath();
-        ctx.moveTo(450, 360);
-        ctx.lineTo(950, 360);
-        ctx.strokeStyle = "#d4af37";
-        ctx.lineWidth = 3;
-        ctx.stroke();
+                ctx.drawImage(
+                    logo,
+                    (canvas.width - size) / 2,
+                    (canvas.height - size) / 2,
+                    size,
+                    size
+                );
 
-        // name
-        const upperName = name.toUpperCase();
-        ctx.fillText(upperName, 700, 420);
+                ctx.globalAlpha = 1;
+            }
 
-        // 🔻 BOTTOM LINE
-        ctx.beginPath();
-        ctx.moveTo(450, 440);
-        ctx.lineTo(950, 440);
-        ctx.strokeStyle = "#d4af37";
-        ctx.lineWidth = 2;
-        ctx.stroke();
+            // 🟡 DOUBLE BORDER
+            ctx.strokeStyle = "#d4af37";
+            ctx.lineWidth = 8;
+            ctx.strokeRect(30, 30, 1340, 940);
 
-        // 📚 Description
-        ctx.font = "26px Arial";
-        ctx.fillStyle = "#333";
-        ctx.fillText("for successfully completing the quiz", 700, 520);
-
-        ctx.font = "bold 32px Arial";
-        ctx.fillStyle = "#000";
-        ctx.fillText(quizTitle, 700, 580);
-
-        // 🎯 Score box
-        ctx.fillStyle = "#fff";
-        ctx.fillRect(550, 630, 300, 70);
-
-        ctx.strokeStyle = "#d4af37";
-        ctx.strokeRect(550, 630, 300, 70);
-
-        ctx.font = "bold 28px Arial";
-        ctx.fillStyle = "#000";
-        ctx.fillText(`Score: ${score}/${total}`, 700, 675);
-
-        // 📅 Date
-        ctx.font = "20px Arial";
-        ctx.fillStyle = "#444";
-        ctx.fillText(new Date().toLocaleDateString(), 700, 750);
-
-        // 🟡 GOLD SEAL
-        ctx.beginPath();
-        ctx.arc(1100, 780, 70, 0, Math.PI * 2);
-        ctx.fillStyle = "#d4af37";
-        ctx.fill();
-
-        ctx.fillStyle = "#000";
-        ctx.font = "bold 16px Arial";
-        ctx.fillText("CERTIFIED", 1100, 785);
-
-        // ✍️ SIGNATURE IMAGE
-        const signatureImg = new Image();
-        signatureImg.src = wzq_cert.signature;
-
-        signatureImg.onload = function () {
-
-            const centerX = 300; // center of signature block
-
-            // 📏 LINE (centered)
-            ctx.beginPath();
-            ctx.moveTo(centerX - 120, 800);
-            ctx.lineTo(centerX + 120, 800);
             ctx.strokeStyle = "#000";
-            ctx.lineWidth = 1;
+            ctx.lineWidth = 2;
+            ctx.strokeRect(50, 50, 1300, 900);
+
+            ctx.textAlign = "center";
+
+            // 🏆 TITLE
+            ctx.font = "bold 60px Arial";
+            ctx.fillStyle = "#222";
+            ctx.fillText("CERTIFICATE", 700, 180);
+
+            ctx.font = "28px Arial";
+            ctx.fillStyle = "#555";
+            ctx.fillText("OF ACHIEVEMENT", 700, 230);
+
+            // 📜 Subtitle
+            ctx.font = "24px Arial";
+            ctx.fillStyle = "#444";
+            ctx.fillText("This is proudly presented to", 700, 320);
+
+            // 🧑 NAME
+            ctx.font = "bold 56px Verdana";
+            ctx.fillStyle = "#ef2c6d";
+
+            const upperName = name.toUpperCase();
+            ctx.fillText(upperName, 700, 420);
+
+            // 🔝 TOP LINE
+            ctx.beginPath();
+            ctx.moveTo(450, 360);
+            ctx.lineTo(950, 360);
+
+            // 🔻 BOTTOM LINE
+            ctx.moveTo(450, 440);
+            ctx.lineTo(950, 440);
+
+            ctx.strokeStyle = "#d4af37";
+            ctx.lineWidth = 2;
             ctx.stroke();
 
-            // 🖊️ SIGNATURE (centered)
-            const sigWidth = 220;
-            const sigHeight = 40;
+            // 📚 Description
+            ctx.font = "26px Arial";
+            ctx.fillStyle = "#333";
+            ctx.fillText("for successfully completing the quiz", 700, 520);
 
-            const lineY = 800;
-
-            // place signature just above line
-            const sigY = lineY - sigHeight - 5;
-
-            ctx.drawImage(
-                signatureImg,
-                centerX - sigWidth / 2,
-                sigY,
-                sigWidth,
-                sigHeight
-            );
-
-            // 👤 NAME (NEW — between signature & founder)
-            ctx.font = "italic 28px cursive";
+            ctx.font = "bold 32px Arial";
             ctx.fillStyle = "#000";
-            ctx.fillText("Mohana Krishnnappa", centerX, 830);
+            ctx.fillText(quizTitle, 700, 580);
 
-            // 🏷️ ROLE
-            ctx.font = "18px Arial";
+            // 🎯 Score box
+            ctx.fillStyle = "#fff";
+            ctx.fillRect(550, 630, 300, 70);
+
+            ctx.strokeStyle = "#d4af37";
+            ctx.strokeRect(550, 630, 300, 70);
+
+            ctx.font = "bold 28px Arial";
+            ctx.fillStyle = "#000";
+            ctx.fillText(`Score: ${score}/${total}`, 700, 675);
+
+            // 📅 Date
+            ctx.font = "20px Arial";
             ctx.fillStyle = "#444";
-            ctx.fillText("Founder", centerX, 860);
+            ctx.fillText(new Date().toLocaleDateString(), 700, 750);
 
-            // ✅ FINAL IMAGE
-            const image = canvas.toDataURL("image/png");
+            // 🟡 GOLD SEAL
+            ctx.beginPath();
+            ctx.arc(1100, 780, 70, 0, Math.PI * 2);
+            ctx.fillStyle = "#d4af37";
+            ctx.fill();
 
-            const link = document.createElement("a");
-            link.download = "certificate.png";
-            link.href = image;
+            ctx.fillStyle = "#000";
+            ctx.font = "bold 16px Arial";
+            ctx.fillText("CERTIFIED", 1100, 785);
 
-            document.body.appendChild(link);
-            setTimeout(() => link.click(), 100);
-            document.body.removeChild(link);
+            // ✍️ SIGNATURE
+            const signatureImg = new Image();
+            signatureImg.src = wzq_cert.signature;
 
-            window.generatedCert = image;
+            signatureImg.onload = function () {
 
-            callback(image);
-        };
+                const centerX = 300;
+                const lineY = 800;
 
-        // ⚠️ fallback (if image fails)
-        signatureImg.onerror = function () {
-            console.error("Signature image not loaded");
+                // 📏 LINE
+                ctx.beginPath();
+                ctx.moveTo(centerX - 120, lineY);
+                ctx.lineTo(centerX + 120, lineY);
+                ctx.strokeStyle = "#000";
+                ctx.lineWidth = 1;
+                ctx.stroke();
 
-            const image = canvas.toDataURL("image/png");
+                // 🖊️ SIGNATURE (220x40 aligned)
+                const sigWidth = 220;
+                const sigHeight = 40;
 
-            const link = document.createElement("a");
-            link.download = "certificate.png";
-            link.href = image;
+                const sigY = lineY - sigHeight - 5;
 
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+                ctx.drawImage(
+                    signatureImg,
+                    centerX - sigWidth / 2,
+                    sigY,
+                    sigWidth,
+                    sigHeight
+                );
 
-            window.generatedCert = image;
-            callback(image);
-        };
+                // 👤 NAME
+                ctx.font = "italic 26px Cursive";
+                ctx.fillStyle = "#000";
+                ctx.fillText("Mohana Krishnnappa", centerX, 830);
+
+                // 🏷️ ROLE
+                ctx.font = "18px Arial";
+                ctx.fillStyle = "#444";
+                ctx.fillText("Founder", centerX, 860);
+
+                finish();
+            };
+
+            signatureImg.onerror = finish;
+
+            function finish() {
+
+                const image = canvas.toDataURL("image/png");
+
+                const link = document.createElement("a");
+                link.download = "certificate.png";
+                link.href = image;
+
+                document.body.appendChild(link);
+                setTimeout(() => link.click(), 100);
+                document.body.removeChild(link);
+
+                window.generatedCert = image;
+
+                callback(image);
+            }
+        }
+
+        // load handling
+        logo.onload = drawAll;
+        logo.onerror = drawAll;
+
+        // fallback safety
+        setTimeout(drawAll, 300);
     }
 
 });

@@ -57,7 +57,8 @@ add_action('wp_enqueue_scripts', function() {
 
         wp_localize_script('wzq-cert', 'wzq_cert', [
             'site_url' => home_url(),
-            'signature' => WZQ_URL . 'assets/img/signature-v2.png'
+            'signature' => WZQ_URL . 'assets/img/signature-v2.png',
+            'logo' => WZQ_URL . 'assets/img/logo.png'
         ]);
     }
 
