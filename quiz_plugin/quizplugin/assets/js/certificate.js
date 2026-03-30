@@ -232,6 +232,12 @@ document.addEventListener("click", async function (e) {
                 22
             );
 
+            const domain = wzq_cert.site_host || "yourwebsite.com";
+
+            ctx.font = "16px Arial";
+            ctx.fillStyle = "#555";
+            ctx.fillText(`Issued by: ${domain}`, 700, 840);
+
             // 🟡 GOLD SEAL
             ctx.beginPath();
             ctx.arc(1100, 780, 70, 0, Math.PI * 2);
@@ -281,7 +287,7 @@ document.addEventListener("click", async function (e) {
                 // 🏷️ ROLE
                 ctx.font = "18px Arial";
                 ctx.fillStyle = "#444";
-                ctx.fillText("Founder", centerX, 860);
+                ctx.fillText(`(On behalf of ${domain})`, centerX, 860);
 
                 finish();
             };
