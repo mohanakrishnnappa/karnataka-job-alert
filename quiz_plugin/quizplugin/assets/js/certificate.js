@@ -11,16 +11,36 @@ document.addEventListener("click", async function (e) {
 
     if (downloadBtn) {
 
-        console.log("CLICK DETECTED");
-
         const quizId = wrapper.dataset.quiz;
         const key = "quiz_cert_" + quizId;
 
         const data = JSON.parse(localStorage.getItem(key));
 
-        if (data && data.downloaded) {
-            alert("Already downloaded");
-            return;
+        const downloadBtn = e.target.closest("#wzq-download-cert");
+
+        if (downloadBtn) {
+
+            const quizId = wrapper.dataset.quiz;
+            const key = "quiz_cert_" + quizId;
+
+            const data = JSON.parse(sessionStorage.getItem(key)); // 🔥 sessionStorage
+
+            // ✅ If already generated → download directly
+            if (data && data.generated && data.image) {
+
+                const link = document.createElement("a");
+                link.download = "certificate.png";
+                link.href = data.image;
+
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                return;
+            }
+
+            // ✅ First time → show popup
+            if (popup) popup.style.display = "flex";
         }
 
         if (popup) popup.style.display = "flex";
@@ -34,6 +54,7 @@ document.addEventListener("click", async function (e) {
 
     // ✅ SAVE
     const saveBtn = e.target.closest("#wzq-cert-save");
+
     if (saveBtn) {
 
         const name = nameInput?.value.trim();
@@ -49,16 +70,17 @@ document.addEventListener("click", async function (e) {
 
         const quizTitle = document.querySelector(".wzq-question-text")?.innerText || "Quiz";
 
-        generateCertificate(name, score, total, quizTitle);
+        const image = generateCertificate(name, score, total, quizTitle);
 
-        localStorage.setItem(key, JSON.stringify({
-            downloaded: true,
-            name: name
+        // ✅ store in session (not permanent)
+        sessionStorage.setItem(key, JSON.stringify({
+            generated: true,
+            name: name,
+            image: image
         }));
 
         if (popup) popup.style.display = "none";
 
-        // show share button
         const shareBtn = document.getElementById("wzq-share-cert");
         if (shareBtn) shareBtn.style.display = "inline-block";
     }
@@ -83,7 +105,6 @@ document.addEventListener("click", async function (e) {
             window.open(`https://wa.me/?text=${encodeURIComponent(text)}`);
         }
     }
-
 
     // 🎨 GENERATE CERTIFICATE
     function generateCertificate(name, score, total, quizTitle) {
@@ -143,7 +164,6 @@ document.addEventListener("click", async function (e) {
         // Download
         const link = document.createElement("a");
         link.download = "certificate.png";
-        console.log("GENERATING CERT...");
         link.href = canvas.toDataURL();
 
         document.body.appendChild(link); // 🔥 REQUIRED
