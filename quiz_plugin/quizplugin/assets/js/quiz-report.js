@@ -1,5 +1,4 @@
 if (!document.getElementById("wzq-report-modal")) {
-    console.log("Report JS skipped (not quiz page)");
 } else {// 🚩 REPORT SYSTEM (SEPARATE FILE)
 
     let reportModal = document.getElementById("wzq-report-modal");

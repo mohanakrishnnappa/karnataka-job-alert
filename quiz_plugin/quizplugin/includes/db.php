@@ -27,7 +27,7 @@ function wzq_get_questions($quiz_id) {
     $quiz_id = (int) $quiz_id;
     return $wpdb->get_results(
         $wpdb->prepare(
-            "SELECT * FROM " . WZQ_TABLE_QUESTIONS . " WHERE quiz_id = %d ORDER BY order_index ASC",
+            "SELECT id, question, option_a, option_b, option_c, option_d, correct, explanation FROM " . WZQ_TABLE_QUESTIONS . " WHERE quiz_id = %d ORDER BY order_index ASC",
             $quiz_id
         )
     ) ?: [];
@@ -80,8 +80,7 @@ function wzq_create_tables() {
         explanation TEXT,
         order_index INT,
 
-        KEY idx_quiz_id (quiz_id),
-        KEY idx_order (order_index)
+        KEY idx_quiz_order (quiz_id, order_index)
 
     ) $charset;";
 
@@ -94,7 +93,9 @@ function wzq_create_tables() {
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
 
         KEY idx_quiz_id (quiz_id),
-        KEY idx_question_id (question_id)
+        KEY idx_question_id (question_id),
+        KEY idx_created (created_at)
+        
     ) $charset;";
 
     dbDelta($sql1);
