@@ -150,8 +150,8 @@ document.addEventListener("click", async function (e) {
         ctx.fillText("This is proudly presented to", 700, 320);
 
         // 🧑 NAME + TOP/BOTTOM BORDER
-        ctx.font = "bold 56px Arial";
-        ctx.fillStyle = "#000";
+        ctx.font = "bold 56px Verdana";
+        ctx.fillStyle = "#ef2c6d";
 
         // 🔝 TOP LINE
         ctx.beginPath();
@@ -162,7 +162,8 @@ document.addEventListener("click", async function (e) {
         ctx.stroke();
 
         // name
-        ctx.fillText(name, 700, 420);
+        const upperName = name.toUpperCase();
+        ctx.fillText(upperName, 700, 420);
 
         // 🔻 BOTTOM LINE
         ctx.beginPath();
@@ -225,7 +226,7 @@ document.addEventListener("click", async function (e) {
 
             // 🖊️ SIGNATURE (centered)
             const sigWidth = 220;
-            const sigHeight = 80;
+            const sigHeight = 40;
 
             ctx.drawImage(
                 signatureImg,
