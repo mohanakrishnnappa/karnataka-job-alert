@@ -1,0 +1,33 @@
+<?php
+
+if (!defined('ABSPATH')) {
+    exit;
+}
+
+add_action('init', function() {
+
+    register_post_type('wz_quiz', [
+        'label' => 'Quizzes',
+        'public' => true,
+        'has_archive' => 'quiz',
+        'rewrite' => ['slug' => 'quiz'],
+        'supports' => ['title'],
+        'taxonomies' => ['wz_quiz_category'],
+        'menu_icon' => 'dashicons-welcome-learn-more'
+    ]);
+
+    register_taxonomy('wz_quiz_category', 'wz_quiz', [
+        'label' => 'Quiz Categories',
+        'hierarchical' => true,
+        'rewrite' => [
+            'slug' => 'quiz-category',
+            'with_front' => false
+        ],
+        'show_admin_column' => true,
+
+        'public' => true,
+        'show_ui' => true,
+        'show_in_rest' => true,
+    ]);
+
+});
