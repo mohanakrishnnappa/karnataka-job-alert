@@ -58,8 +58,13 @@ document.addEventListener("click", async function (e) {
 
     if (saveBtn) {
 
-        const name = nameInput?.value.trim();
+        let name = nameInput?.value.trim();
         if (!name) return alert("Enter name");
+
+        // 🔒 LIMIT NAME LENGTH (35 chars)
+        if (name.length > 35) {
+            name = name.substring(0, 35);
+        }
 
         const quizId = wrapper.dataset.quiz;
         const key = "quiz_cert_" + quizId;
@@ -116,6 +121,17 @@ document.addEventListener("click", async function (e) {
         canvas.height = 1000;
 
         const ctx = canvas.getContext("2d");
+
+        function fitName(ctx, text, maxWidth, initialFontSize) {
+            let fontSize = initialFontSize;
+
+            do {
+                ctx.font = `bold ${fontSize}px Georgia`;
+                fontSize--;
+            } while (ctx.measureText(text).width > maxWidth && fontSize > 28);
+
+            return fontSize;
+        }
 
         // 🎨 WHITE BACKGROUND
         ctx.fillStyle = "#ffffff";
@@ -176,20 +192,30 @@ document.addEventListener("click", async function (e) {
             ctx.fillText("This is proudly presented to", 700, 320);
 
             // 🧑 NAME
-            ctx.font = "bold 56px Georgia";
             ctx.fillStyle = "#ef2c6d";
 
             const upperName = name.toUpperCase();
-            // 🧑 NAME (move slightly down)
-            ctx.fillText(upperName, 700, 428);
+
+            // 🎯 Auto-fit font size
+            const maxWidth = 900;
+            const fontSize = fitName(ctx, upperName, maxWidth, 56);
+            ctx.font = `bold ${fontSize}px Georgia`;
+
+            const nameY = 430;
+            ctx.fillText(upperName, canvas.width / 2, nameY);
+
+            // 📏 Dynamic line width based on text
+            const textWidth = ctx.measureText(upperName).width;
+            const centerX = canvas.width / 2;
 
             // 🔝 TOP LINE
-            ctx.moveTo(450, 370);
-            ctx.lineTo(950, 370);
+            ctx.beginPath();
+            ctx.moveTo(centerX - textWidth / 2 - 20, nameY - 50);
+            ctx.lineTo(centerX + textWidth / 2 + 20, nameY - 50);
 
             // 🔻 BOTTOM LINE
-            ctx.moveTo(450, 450);
-            ctx.lineTo(950, 450);
+            ctx.moveTo(centerX - textWidth / 2 - 20, nameY + 20);
+            ctx.lineTo(centerX + textWidth / 2 + 20, nameY + 20);
 
             ctx.strokeStyle = "#d4af37";
             ctx.lineWidth = 2;
