@@ -74,12 +74,12 @@ function wzq_reports_page(){
 
     global $wpdb;
 
-    $table = $wpdb->prefix . 'wz_reports';
+    $table = WZQ_TABLE_REPORTS;
 
     $reports = $wpdb->get_results("
         SELECT r.*, q.post_id, p.post_title
         FROM {$table} r
-        LEFT JOIN {$wpdb->prefix}wz_quizzes q ON r.quiz_id = q.id
+        LEFT JOIN " . WZQ_TABLE_QUIZZES . " q ON r.quiz_id = q.id
         LEFT JOIN {$wpdb->posts} p ON q.post_id = p.ID
         ORDER BY r.created_at DESC
     ");
@@ -102,7 +102,7 @@ function wzq_reports_page(){
         echo "<tr>
                 <td colspan='5'>
                     <div style='padding:30px;text-align:center;'>
-                        <h3 style='margin:0;'>📭 Nothign to Show</h3>
+                        <h3 style='margin:0;'>📭 Nothing to Show</h3>
                         <p style='color:#777;'>Users haven't reported any questions.</p>
                     </div>
                 </td>
@@ -117,7 +117,6 @@ function wzq_reports_page(){
 
             // Links
             $edit_link = get_edit_post_link($r->post_id);
-            $view_link = get_permalink($r->post_id);
 
             echo "<tr>";
 
@@ -136,7 +135,7 @@ function wzq_reports_page(){
             echo "<td>".esc_html($r->issue)."</td>";
 
             // Date
-            echo "<td>{$r->created_at}</td>";
+            echo "<td>" . esc_html($r->created_at) . "</td>";
 
             // Action
             echo "<td>
