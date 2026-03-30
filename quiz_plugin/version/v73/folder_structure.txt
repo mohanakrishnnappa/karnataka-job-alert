@@ -1,0 +1,26 @@
+quizplugin/
+├── assets
+│   ├── css
+│   │   └── quiz.css
+│   ├── img
+│   │   ├── certificate-logo-v1.png
+│   │   ├── certified-seal-v1.png
+│   │   └── signature-v2.png
+│   ├── js
+│   │   ├── archive.js
+│   │   ├── certificate.js
+│   │   ├── quiz-report.js
+│   │   └── quiz.js
+│   ├── sounds
+│   │   ├── correct.mp3
+│   │   ├── finish.mp3
+│   │   └── wrong.mp3
+├── includes
+│   ├── admin-qpreport.php
+│   ├── admin.php
+│   ├── certificate.php
+│   ├── cpt.php
+│   ├── db.php
+│   └── shortcode.php
+├── folder_structure.txt
+└── webzeeto-quiz.php
