@@ -10,24 +10,8 @@ add_action('add_meta_boxes', function() {
 
 function wzq_builder_ui($post) {
 
-    global $wpdb;
-
-    $quiz_table = $wpdb->prefix.'wz_quizzes';
-    $question_table = $wpdb->prefix.'wz_questions';
-
-    // ✅ Load quiz
-    $quiz = $wpdb->get_row(
-        $wpdb->prepare("SELECT * FROM $quiz_table WHERE post_id = %d", $post->ID)
-    );
-
-    // ✅ Load questions
-    $questions = [];
-
-    if($quiz){
-        $questions = $wpdb->get_results(
-            $wpdb->prepare("SELECT * FROM $question_table WHERE quiz_id = %d ORDER BY order_index ASC", $quiz->id)
-        );
-    }
+    $quiz      = wzq_get_quiz_by_post( $post->ID );
+    $questions = $quiz ? wzq_get_questions( $quiz->id ) : [];
 
 ?>
 <style>
@@ -395,6 +379,35 @@ function wzq_builder_ui($post) {
 
 let wzqDeleteTarget = null;
 
+// ─── Shared question HTML builder (single source of truth) ───────────────────
+function wzqBuildQuestionHTML(index, data) {
+    data = data || {};
+    const sel = (v) => data.correct === v ? 'selected' : '';
+    return `
+    <div class="wzq-question-box">
+        <p><strong>Question ${String(index+1).padStart(2,'0')}:</strong></p>
+        <textarea name="questions[${index}][question]" style="width:100%">${data.question || ''}</textarea>
+        <p>Options</p>
+        <div class="wzq-options-grid">
+            <div><span>A)</span><input type="text" name="questions[${index}][a]" value="${data.a || ''}" placeholder="Option A"></div>
+            <div><span>B)</span><input type="text" name="questions[${index}][b]" value="${data.b || ''}" placeholder="Option B"></div>
+            <div><span>C)</span><input type="text" name="questions[${index}][c]" value="${data.c || ''}" placeholder="Option C"></div>
+            <div><span>D)</span><input type="text" name="questions[${index}][d]" value="${data.d || ''}" placeholder="Option D"></div>
+        </div>
+        <p>Correct Answer</p>
+        <select name="questions[${index}][correct]">
+            <option value="a" ${sel('a')}>A</option>
+            <option value="b" ${sel('b')}>B</option>
+            <option value="c" ${sel('c')}>C</option>
+            <option value="d" ${sel('d')}>D</option>
+        </select>
+        <p>Explanation</p>
+        <textarea name="questions[${index}][explanation]" style="width:100%">${data.explanation || ''}</textarea>
+        <button type="button" onclick="wzqRemoveQuestion(this)">❌ Remove</button>
+    </div>`;
+}
+// ─────────────────────────────────────────────────────────────────────────────
+
 function wzqRemoveQuestion(btn){
     wzqDeleteTarget = btn;
     document.getElementById('wzq-confirm-modal').style.display = 'flex';
@@ -413,40 +426,9 @@ function wzqShowTab(tab, el){
 }
 
 function wzqAddQuestion(){
-
-    let container = document.getElementById('wzq-questions');
-
-    let index = container.querySelectorAll('.wzq-question-box').length;
-
-    let html = `
-    <div class="wzq-question-box">
-        <p><strong>Question ${String(index+1).padStart(2,'0')}:</strong></p>
-        <textarea name="questions[`+index+`][question]" style="width:100%"></textarea>
-
-        <p>Options</p>
-        <div class="wzq-options-grid">
-            <div><span>A)</span><input type="text" name="questions[`+index+`][a]" placeholder="Option A"></div>
-            <div><span>B)</span><input type="text" name="questions[`+index+`][b]" placeholder="Option B"></div>
-            <div><span>C)</span><input type="text" name="questions[`+index+`][c]" placeholder="Option C"></div>
-            <div><span>D)</span><input type="text" name="questions[`+index+`][d]" placeholder="Option D"></div>
-        </div>
-
-        <p>Correct Answer</p>
-        <select name="questions[`+index+`][correct]">
-            <option value="a">A</option>
-            <option value="b">B</option>
-            <option value="c">C</option>
-            <option value="d">D</option>
-        </select>
-
-        <p>Explanation</p>
-        <textarea name="questions[`+index+`][explanation]" style="width:100%"></textarea>
-
-        <button type="button" onclick="wzqRemoveQuestion(this)">❌ Remove</button>
-    </div>
-    `;
-
-    container.insertAdjacentHTML('beforeend', html);
+    const container = document.getElementById('wzq-questions');
+    const index = container.querySelectorAll('.wzq-question-box').length;
+    container.insertAdjacentHTML('beforeend', wzqBuildQuestionHTML(index));
 }
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -484,39 +466,17 @@ function wzqImportJSON() {
 
         let index = container.querySelectorAll('.wzq-question-box').length;
 
-        let html = `
-        <div class="wzq-question-box">
+        const data = {
+            question:    q.question,
+            a:           q.options.A || q.options.a || '',
+            b:           q.options.B || q.options.b || '',
+            c:           q.options.C || q.options.c || '',
+            d:           q.options.D || q.options.d || '',
+            correct:     (q.answer || q.correct || 'a').toLowerCase(),
+            explanation: q.explanation || ''
+        };
 
-            <p><strong>Question ${String(index+1).padStart(2,'0')}:</strong></p>
-            <textarea name="questions[`+index+`][question]">${q.question}</textarea>
-
-            <p>Options</p>
-            <div class="wzq-options-grid">
-                <div><span>A)</span><input type="text" name="questions[`+index+`][a]" value="${q.options.A || q.options.a}"></div>
-                <div><span>B)</span><input type="text" name="questions[`+index+`][b]" value="${q.options.B || q.options.b}"></div>
-                <div><span>C)</span><input type="text" name="questions[`+index+`][c]" value="${q.options.C || q.options.c}"></div>
-                <div><span>D)</span><input type="text" name="questions[`+index+`][d]" value="${q.options.D || q.options.d}"></div>
-            </div>
-
-            <p>Correct Answer</p>
-            <select name="questions[`+index+`][correct]">
-                <option value="a" ${q.answer == 'A' || q.correct == 'a' ? 'selected' : ''}>A</option>
-                <option value="b" ${q.answer == 'B' || q.correct == 'b' ? 'selected' : ''}>B</option>
-                <option value="c" ${q.answer == 'C' || q.correct == 'c' ? 'selected' : ''}>C</option>
-                <option value="d" ${q.answer == 'D' || q.correct == 'd' ? 'selected' : ''}>D</option>
-            </select>
-
-            <p>Explanation</p>
-            <textarea name="questions[`+index+`][explanation]">${q.explanation || ''}</textarea>
-
-            <button type="button" onclick="wzqRemoveQuestion(this)">❌ Remove</button>
-
-            <hr>
-
-        </div>
-        `;
-
-        container.insertAdjacentHTML('beforeend', html);
+        container.insertAdjacentHTML('beforeend', wzqBuildQuestionHTML(index, data));
     });
 
     // 🔥 Switch to manual tab automatically
@@ -720,16 +680,11 @@ add_action('save_post', function($post_id){
 
     global $wpdb;
 
-    $quiz_table = $wpdb->prefix.'wz_quizzes';
-    $question_table = $wpdb->prefix.'wz_questions';
+    $old_quiz = wzq_get_quiz_by_post( $post_id );
 
-    $old_quiz = $wpdb->get_row(
-        $wpdb->prepare("SELECT * FROM $quiz_table WHERE post_id = %d", $post_id)
-    );
-
-    if($old_quiz){
-        $wpdb->delete($question_table, ['quiz_id' => $old_quiz->id]);
-        $wpdb->delete($quiz_table, ['id' => $old_quiz->id]);
+    if ( $old_quiz ) {
+        $wpdb->delete( WZQ_TABLE_QUESTIONS, ['quiz_id' => $old_quiz->id] );
+        $wpdb->delete( WZQ_TABLE_QUIZZES,   ['id'      => $old_quiz->id] );
     }
 
     if(!$has_questions){
@@ -744,7 +699,7 @@ add_action('save_post', function($post_id){
 
     $total_seconds = ($hours * 3600) + ($minutes * 60) + $seconds;
 
-    $wpdb->insert($quiz_table, [
+    $wpdb->insert( WZQ_TABLE_QUIZZES, [
         'post_id' => $post_id,
         'time_limit' => $total_seconds,
         'random_order' => intval($settings['random_order'] ?? 0),
@@ -762,7 +717,7 @@ add_action('save_post', function($post_id){
 
         if(!empty($data['questions'])){
             foreach($data['questions'] as $i => $q){
-                $wpdb->insert($question_table, [
+                $wpdb->insert( WZQ_TABLE_QUESTIONS, [
                     'quiz_id' => $quiz_id,
                     'question' => sanitize_textarea_field(wp_unslash($q['question'])),
                     'option_a' => sanitize_text_field(wp_unslash($q['options']['a'])),
@@ -810,7 +765,7 @@ add_action('save_post', function($post_id){
                 continue;
             }
 
-            $wpdb->insert($question_table, [
+            $wpdb->insert( WZQ_TABLE_QUESTIONS, [
                 'quiz_id' => $quiz_id,
                 'question' => $question,
                 'option_a' => $a,

@@ -4,17 +4,37 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+// ─── Table name constants (single source of truth) ───────────────────────────
+define('WZQ_TABLE_QUIZZES',   $GLOBALS['wpdb']->prefix . 'wz_quizzes');
+define('WZQ_TABLE_QUESTIONS', $GLOBALS['wpdb']->prefix . 'wz_questions');
+define('WZQ_TABLE_REPORTS',   $GLOBALS['wpdb']->prefix . 'wz_reports');
+
+// ─── Reusable DB helpers ──────────────────────────────────────────────────────
+
+function wzq_get_quiz_by_post( $post_id ) {
+    global $wpdb;
+    return $wpdb->get_row(
+        $wpdb->prepare( "SELECT * FROM " . WZQ_TABLE_QUIZZES . " WHERE post_id = %d", $post_id )
+    );
+}
+
+function wzq_get_questions( $quiz_id ) {
+    global $wpdb;
+    return $wpdb->get_results(
+        $wpdb->prepare( "SELECT * FROM " . WZQ_TABLE_QUESTIONS . " WHERE quiz_id = %d ORDER BY order_index ASC", $quiz_id )
+    );
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+
 function wzq_create_tables() {
     global $wpdb;
 
     $charset = $wpdb->get_charset_collate();
 
-    $quiz_table = $wpdb->prefix . 'wz_quizzes';
-    $question_table = $wpdb->prefix . 'wz_questions';
-
     require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
-    $sql1 = "CREATE TABLE $quiz_table (
+    $sql1 = "CREATE TABLE " . WZQ_TABLE_QUIZZES . " (
         id BIGINT AUTO_INCREMENT PRIMARY KEY,
         post_id BIGINT,
         time_limit INT,
@@ -25,7 +45,7 @@ function wzq_create_tables() {
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     ) $charset;";
 
-    $sql2 = "CREATE TABLE $question_table (
+    $sql2 = "CREATE TABLE " . WZQ_TABLE_QUESTIONS . " (
         id BIGINT AUTO_INCREMENT PRIMARY KEY,
         quiz_id BIGINT,
         question TEXT,
@@ -38,7 +58,7 @@ function wzq_create_tables() {
         order_index INT
     ) $charset;";
 
-    $sql3 = "CREATE TABLE {$wpdb->prefix}wz_reports (
+    $sql3 = "CREATE TABLE " . WZQ_TABLE_REPORTS . " (
         id BIGINT AUTO_INCREMENT PRIMARY KEY,
         quiz_id BIGINT,
         question_id BIGINT,

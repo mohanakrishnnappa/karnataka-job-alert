@@ -177,24 +177,6 @@ if (!document.querySelector(".wzq-wrapper")) {
 
         if (!endTime) endTime = Date.now();
 
-        // ❌ ONLY SHOW WARNING IF NOT FORCE
-        if (!forceSubmit && remaining > 0) {
-
-            warningText.innerText =
-                `You have ${remaining} unanswered question${remaining > 1 ? 's' : ''}`;
-
-            warningBox.classList.add("show");
-            warningBox.style.display = "flex";
-
-            const firstUnanswered = questions.findIndex(q => !q.classList.contains("answered"));
-            if (firstUnanswered !== -1) {
-                current = firstUnanswered;
-                showQuestion(current);
-            }
-
-            return;
-        }
-
         // ✅ ENTER REVIEW MODE
         wrapper.classList.add("wzq-review-mode");
         // 🔊 FINISH SOUND

@@ -6,25 +6,13 @@ if (!defined('ABSPATH')) {
 
 add_shortcode('wz_quiz', function($atts){
 
-    global $wpdb;
-
     $post_id = intval($atts['id']);
 
-    $quiz = $wpdb->get_row(
-        $wpdb->prepare(
-            "SELECT * FROM {$wpdb->prefix}wz_quizzes WHERE post_id = %d",
-            $post_id
-        )
-    );
+    $quiz = wzq_get_quiz_by_post( $post_id );
 
-    if(!$quiz) return "Quiz not found";
+    if ( ! $quiz ) return 'Quiz not found';
 
-    $questions = $wpdb->get_results(
-        $wpdb->prepare(
-            "SELECT * FROM {$wpdb->prefix}wz_questions WHERE quiz_id = %d ORDER BY order_index ASC",
-            $quiz->id
-        )
-    );
+    $questions = wzq_get_questions( $quiz->id );
 
     ob_start();
 ?>

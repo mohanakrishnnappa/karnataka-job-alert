@@ -95,6 +95,14 @@ add_filter('template_include', function($template) {
     return $template;
 });
 
+// ─── Reusable quiz card renderer ─────────────────────────────────────────────
+function wzq_render_quiz_card( $post_id, $title, $permalink ) {
+    return "<div class='wzq-card'>"
+         . "<h3>" . esc_html( $title ) . "</h3>"
+         . "<a class='wzq-btn' href='" . esc_url( $permalink ) . "'>Start Quiz</a>"
+         . "</div>";
+}
+
 // Template filter buttons (AJAX)
 add_action('wp_ajax_wzq_filter_quiz', 'wzq_filter_quiz');
 add_action('wp_ajax_nopriv_wzq_filter_quiz', 'wzq_filter_quiz');
@@ -123,10 +131,7 @@ function wzq_filter_quiz() {
 
         while ($query->have_posts()) : $query->the_post();
 
-            echo "<div class='wzq-card'>";
-            echo "<h3>" . get_the_title() . "</h3>";
-            echo "<a class='wzq-btn' href='" . get_permalink() . "'>Start Quiz</a>";
-            echo "</div>";
+            echo wzq_render_quiz_card( get_the_ID(), get_the_title(), get_permalink() );
 
         endwhile;
 

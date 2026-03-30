@@ -11,7 +11,7 @@ function wzq_report_question(){
 
     global $wpdb;
 
-    $table = $wpdb->prefix . 'wz_reports';
+    $table = WZQ_TABLE_REPORTS;
 
     $result = $wpdb->insert($table, [
         'quiz_id' => intval($_POST['quiz_id']),
@@ -57,7 +57,7 @@ add_action('admin_init', function(){
 
     global $wpdb;
 
-    $table = $wpdb->prefix . 'wz_reports';
+    $table = WZQ_TABLE_REPORTS;
 
     $wpdb->delete($table, ['id' => $id]);
 
