@@ -33,17 +33,6 @@ function wzq_get_questions($quiz_id) {
     ) ?: [];
 }
 
-function wzq_get_question_count($quiz_id) {
-    global $wpdb;
-
-    return (int) $wpdb->get_var(
-        $wpdb->prepare(
-            "SELECT total_questions FROM " . WZQ_TABLE_QUIZZES . " WHERE id = %d",
-            $quiz_id
-        )
-    );
-}
-
 // ─────────────────────────────────────────────────────────────────────────────
 
 function wzq_create_tables() {
@@ -95,7 +84,7 @@ function wzq_create_tables() {
         KEY idx_quiz_id (quiz_id),
         KEY idx_question_id (question_id),
         KEY idx_created (created_at)
-        
+
     ) $charset;";
 
     dbDelta($sql1);
