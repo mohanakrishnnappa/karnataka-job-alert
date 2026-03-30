@@ -123,7 +123,7 @@ function wzq_filter_quiz() {
 
         while ($query->have_posts()) : $query->the_post();
 
-            echo wzq_render_quiz_card( get_the_ID(), get_the_title(), get_permalink() );
+            echo wzq_render_quiz_card( get_the_ID() );
 
         endwhile;
 
