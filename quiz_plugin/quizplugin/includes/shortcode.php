@@ -216,8 +216,6 @@ function wzq_load_questions() {
     // sanitize
     $ids = array_map('intval', $ids);
 
-    $placeholders = implode(',', array_fill(0, count($ids), '%d'));
-
     $ids_str = implode(',', $ids);
 
     $query = "
