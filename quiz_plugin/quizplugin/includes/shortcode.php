@@ -12,8 +12,6 @@ add_shortcode('wz_quiz', function($atts){
 
     if ( ! $quiz ) return 'Quiz not found';
 
-    global $wpdb;
-
     $total_questions = $quiz->total_questions;
 
     ob_start();
