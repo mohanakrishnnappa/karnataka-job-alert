@@ -271,9 +271,6 @@ document.addEventListener("click", async function (e) {
                 // 🟡 SEAL
                 const sealSize = 125;
 
-                ctx.shadowColor = "rgba(0,0,0,0.2)";
-                ctx.shadowBlur = 10;
-
                 ctx.drawImage(
                     sealImg,
                     1100 - sealSize / 2,
