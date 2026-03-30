@@ -58,6 +58,7 @@ add_action('wp_enqueue_scripts', function() {
         wp_localize_script('wzq-cert', 'wzq_cert', [
             'site_url' => home_url(),
             'site_host' => parse_url(home_url(), PHP_URL_HOST),
+            'permalink' => get_permalink(),
             'signature' => WZQ_URL . 'assets/img/signature-v3.png',
             'logo' => WZQ_URL . 'assets/img/certificate-logo-v1.png',
             'certifiedseal' => WZQ_URL . 'assets/img/certified-seal-v1.png',

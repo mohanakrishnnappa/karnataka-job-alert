@@ -600,10 +600,13 @@
 #wzq-cert-popup button:first-child {
     background: #28a745;
     color: #fff;
+    border-radius: 5px;
 }
 
 #wzq-cert-popup button:last-child {
-    background: #ccc;
+    background: #d94242;
+    color: #fff;
+    border-radius: 5px;
 }
 
 /* =============================================================

@@ -109,7 +109,7 @@ document.addEventListener("click", async function (e) {
     const shareBtn = e.target.closest("#wzq-share-cert");
     if (shareBtn) {
 
-        const text = `🎉 I completed a quiz!\nTry here 👉 ${wzq_cert.site_url}`;
+        const text = `🎉 I scored ${window.wzqPercent}% in ${document.title} quiz!\n\n🔥 Can you beat my score? 😎\nTry here 👉 ${wzq_cert.permalink}`;
 
         if (navigator.share && window.generatedCert) {
             const blob = await (await fetch(window.generatedCert)).blob();
