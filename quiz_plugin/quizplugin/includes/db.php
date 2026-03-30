@@ -61,7 +61,10 @@ function wzq_create_tables() {
         ad_after INT,
         custom_btn_text VARCHAR(255),
         custom_btn_link TEXT,
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+        KEY idx_post_id (post_id)
+
     ) $charset;";
 
     $sql2 = "CREATE TABLE " . WZQ_TABLE_QUESTIONS . " (
@@ -74,7 +77,11 @@ function wzq_create_tables() {
         option_d TEXT,
         correct CHAR(1),
         explanation TEXT,
-        order_index INT
+        order_index INT,
+
+        KEY idx_quiz_id (quiz_id),
+        KEY idx_order (order_index)
+
     ) $charset;";
 
     $sql3 = "CREATE TABLE " . WZQ_TABLE_REPORTS . " (
@@ -83,7 +90,10 @@ function wzq_create_tables() {
         question_id BIGINT,
         question_text TEXT,
         issue TEXT,
-        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+        KEY idx_quiz_id (quiz_id),
+        KEY idx_question_id (question_id)
     ) $charset;";
 
     dbDelta($sql1);

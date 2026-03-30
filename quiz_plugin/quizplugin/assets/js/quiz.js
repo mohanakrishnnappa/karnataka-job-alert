@@ -1,5 +1,4 @@
 if (!document.querySelector(".wzq-wrapper")) {
-    console.log("Quiz JS skipped (not quiz page)");
 } else {// 🔀 SHUFFLE FUNCTION (Fisher-Yates)
 
     let order = [];

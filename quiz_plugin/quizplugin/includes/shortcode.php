@@ -216,7 +216,7 @@ function wzq_load_questions() {
     // sanitize
     $ids = array_map('intval', $ids);
 
-    $ids_str = implode(',', $ids);
+    $ids_str = implode(',', array_map('intval', $ids));
 
     $query = "
         SELECT id, question, option_a, option_b, option_c, option_d, correct, explanation
@@ -225,10 +225,7 @@ function wzq_load_questions() {
         ORDER BY FIELD(id, $ids_str)
     ";
 
-    $results = $wpdb->get_results(
-        $wpdb->prepare($query, ...$ids),
-        ARRAY_A
-    );
+    $results = $wpdb->get_results($query, ARRAY_A);
 
     // 🔥 FIX: return proper keys expected by JS
     $formatted = array_map(function($q){
