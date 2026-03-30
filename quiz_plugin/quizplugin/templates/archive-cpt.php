@@ -232,7 +232,7 @@ div.wzq-fullwidth {
         <?php
             $quiz = wzq_get_quiz_by_post(get_the_ID());
 
-            $question_count = wzq_get_question_count($quiz->id ?? 0);
+            $question_count = $quiz->total_questions ?? 0;
 
             // Format time
             $time_label = "Unlimited";

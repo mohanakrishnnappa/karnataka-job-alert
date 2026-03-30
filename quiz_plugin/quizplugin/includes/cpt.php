@@ -12,6 +12,7 @@ add_action('init', function() {
         'has_archive' => 'quiz',
         'rewrite' => ['slug' => 'quiz'],
         'supports' => ['title'],
+        'taxonomies' => ['wz_quiz_category'],
         'menu_icon' => 'dashicons-welcome-learn-more'
     ]);
 
@@ -22,7 +23,11 @@ add_action('init', function() {
             'slug' => 'quiz-category',
             'with_front' => false
         ],
-        'show_admin_column' => true
+        'show_admin_column' => true,
+
+        'public' => true,
+        'show_ui' => true,
+        'show_in_rest' => true,
     ]);
 
 });

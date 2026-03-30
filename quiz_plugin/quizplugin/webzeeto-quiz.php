@@ -96,48 +96,43 @@ add_filter('template_include', function($template) {
 });
 
 // ─── Reusable quiz card renderer ─────────────────────────────────────────────
-function wzq_render_quiz_card( $post_id, $title, $permalink ) {
-    return "<div class='wzq-card'>"
-         . "<h3>" . esc_html( $title ) . "</h3>"
-         . "<a class='wzq-btn' href='" . esc_url( $permalink ) . "'>Start Quiz</a>"
-         . "</div>";
-}
+function wzq_render_quiz_card($post_id) {
 
-// Template filter buttons (AJAX)
-add_action('wp_ajax_wzq_filter_quiz', 'wzq_filter_quiz');
-add_action('wp_ajax_nopriv_wzq_filter_quiz', 'wzq_filter_quiz');
+    $quiz = wzq_get_quiz_by_post($post_id);
 
-function wzq_filter_quiz() {
+    // ✅ DIRECT READ (NO QUERY)
+    $question_count = $quiz->total_questions ?? 0;
 
-    $cat = sanitize_text_field($_POST['cat']);
+    // ⏱ Time format
+    $time_label = "Unlimited";
 
-    $tax_query = [];
+    if (!empty($quiz->time_limit)) {
+        $m = floor($quiz->time_limit / 60);
+        $s = $quiz->time_limit % 60;
 
-    if (!empty($cat)) {
-        $tax_query[] = [
-            'taxonomy' => 'wz_quiz_category',
-            'field' => 'slug',
-            'terms' => $cat
-        ];
+        if ($m > 0) {
+            $time_label = $m . " min";
+        } elseif ($s > 0) {
+            $time_label = $s . " sec";
+        }
     }
 
-    $query = new WP_Query([
-        'post_type' => 'wz_quiz',
-        'posts_per_page' => -1,
-        'tax_query' => $tax_query
-    ]);
+    ob_start();
+    ?>
 
-    if ($query->have_posts()) :
+    <div class="wzq-card">
+        <h2><?php echo esc_html(get_the_title($post_id)); ?></h2>
 
-        while ($query->have_posts()) : $query->the_post();
+        <div class="wzq-meta">
+            <span>📊 <?php echo esc_html($question_count); ?> Questions</span>
+            <span>⏱ <?php echo esc_html($time_label); ?></span>
+        </div>
 
-            echo wzq_render_quiz_card( get_the_ID(), get_the_title(), get_permalink() );
+        <a href="<?php echo esc_url(get_permalink($post_id)); ?>" class="wzq-btn">
+            ▶ Start Quiz
+        </a>
+    </div>
 
-        endwhile;
-
-    else:
-        echo "<p>No quizzes found</p>";
-    endif;
-
-    wp_die();
+    <?php
+    return ob_get_clean();
 }
