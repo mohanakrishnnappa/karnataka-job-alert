@@ -227,30 +227,10 @@ div.wzq-fullwidth {
         // 👇 LOOP STARTS
         if ($query->have_posts()) :
             while ($query->have_posts()) : $query->the_post();
-        ?>
-        
-        <?php
-            $quiz = wzq_get_quiz_by_post(get_the_ID());
 
-            $question_count = $quiz->total_questions ?? 0;
+                echo wzq_render_quiz_card(get_the_ID());
 
-            // Format time
-            $time_label = wzq_format_time($quiz->time_limit);
-            
-            ?>
-
-            <div class="wzq-card">
-                <h2><?php the_title(); ?></h2>
-
-                <div class="wzq-meta">
-                    <span>📊 <?php echo $question_count; ?> Questions</span>
-                    <span>⏱ <?php echo $time_label; ?></span>
-                </div>
-
-                <a href="<?php the_permalink(); ?>" class="wzq-btn">▶ Start Quiz</a>
-            </div>
-
-        <?php endwhile;
+            endwhile;
         else :
             echo "<p>No quizzes found</p>";
         endif;
