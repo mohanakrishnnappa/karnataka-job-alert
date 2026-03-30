@@ -751,13 +751,7 @@ add_action('save_post', function($post_id){
             $exp = sanitize_textarea_field(wp_unslash($q['explanation'] ?? ''));
 
             // ❌ Optional: Skip if question OR options incomplete
-            if(
-                $question === '' ||
-                $a === '' ||
-                $b === '' ||
-                $c === '' ||
-                $d === ''
-            ){
+            if (!$question || !$a || !$b || !$c || !$d) {
                 continue;
             }
 
