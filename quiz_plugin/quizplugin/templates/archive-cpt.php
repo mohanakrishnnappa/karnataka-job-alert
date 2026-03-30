@@ -230,21 +230,9 @@ div.wzq-fullwidth {
         ?>
         
         <?php
-            global $wpdb;
+            $quiz = wzq_get_quiz_by_post(get_the_ID());
 
-            $quiz = $wpdb->get_row(
-                $wpdb->prepare(
-                    "SELECT * FROM {$wpdb->prefix}wz_quizzes WHERE post_id = %d",
-                    get_the_ID()
-                )
-            );
-
-            $question_count = $wpdb->get_var(
-                $wpdb->prepare(
-                    "SELECT COUNT(*) FROM {$wpdb->prefix}wz_questions WHERE quiz_id = %d",
-                    $quiz->id ?? 0
-                )
-            );
+            $question_count = wzq_get_question_count($quiz->id ?? 0);
 
             // Format time
             $time_label = "Unlimited";
