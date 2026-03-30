@@ -664,6 +664,10 @@ add_action('save_post', function($post_id){
     if (get_post_type($post_id) != 'wz_quiz') return;
     if (!current_user_can('edit_post', $post_id)) return;
 
+    if ( !isset($_POST['questions']) && !isset($_POST['wzq_json']) ) {
+        return;
+    }
+
     $post_status = get_post_status($post_id);
 
     if (in_array($post_status, ['trash', 'auto-draft', 'inherit'])) {
@@ -685,6 +689,10 @@ add_action('save_post', function($post_id){
         $has_questions = true;
     }
 
+    if(!$has_questions){
+        return;
+    }
+
     global $wpdb;
 
     $old_quiz = wzq_get_quiz_by_post( $post_id );
@@ -692,10 +700,6 @@ add_action('save_post', function($post_id){
     if ( $old_quiz ) {
         $wpdb->delete( WZQ_TABLE_QUESTIONS, ['quiz_id' => $old_quiz->id] );
         $wpdb->delete( WZQ_TABLE_QUIZZES,   ['id'      => $old_quiz->id] );
-    }
-
-    if(!$has_questions){
-        return;
     }
 
     $settings = $_POST['wzq_settings'] ?? [];
