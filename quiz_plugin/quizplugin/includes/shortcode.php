@@ -206,10 +206,11 @@ function wzq_load_questions() {
         wp_die();
     }
 
-    // sanitize
+    // sanitize once
     $ids = array_map('intval', $ids);
 
-    $ids_str = implode(',', array_map('intval', $ids));
+    // reuse sanitized array
+    $ids_str = implode(',', $ids);
 
     $query = "
         SELECT id, question, option_a, option_b, option_c, option_d, correct, explanation
