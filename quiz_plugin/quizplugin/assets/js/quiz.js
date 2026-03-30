@@ -303,6 +303,7 @@ if (!document.querySelector(".wzq-wrapper")) {
         }
 
         const percent = Math.round((score / total) * 100);
+        window.wzqPercent = percent;
 
         // ⏱ TIME CALCULATION
         let totalSeconds = Math.floor((endTime - startTime) / 1000);
@@ -384,9 +385,14 @@ if (!document.querySelector(".wzq-wrapper")) {
             actionWrap.appendChild(shareBtn);
         }
 
-        // 🎯 SHOW ONLY IF >= 60%
-        if (percent >= 60) {
+        // 🎯 SHOW ONLY IF >= 35%
+        if (percent >= 35) {
             certBtn.style.display = "inline-block";
+            certBtn.disabled = false;
+        } else {
+            certBtn.style.display = "inline-block";
+            certBtn.disabled = false;
+            certBtn.innerText = "🎓 Download Certificate";
         }
     }
 
@@ -581,3 +587,4 @@ if (!document.querySelector(".wzq-wrapper")) {
 
     });
 }
+

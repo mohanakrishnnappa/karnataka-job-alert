@@ -24,6 +24,16 @@ document.addEventListener("click", async function (e) {
 
     if (downloadBtn) {
 
+        // 🚫 BLOCK if less than 35%
+        if (!window.wzqPercent || window.wzqPercent < 35) {
+            const warningBox = document.querySelector(".wzq-warning");
+            const warningText = document.querySelector(".wzq-warning-text");
+            if (warningBox && warningText) {
+                alert("Minimum 35% required to download certificate");
+            }
+            return; // 🚨 HARD STOP (no popup)
+        }
+
         const quizId = wrapper.dataset.quiz;
         const key = "quiz_cert_" + quizId;
 
@@ -40,10 +50,10 @@ document.addEventListener("click", async function (e) {
             link.click();
             document.body.removeChild(link);
 
-            return; // 🔥 IMPORTANT (stop popup)
+            return;
         }
 
-        // ❗ First time → show popup
+        // ✅ ONLY HERE popup opens
         if (popup) popup.style.display = "flex";
     }
 
