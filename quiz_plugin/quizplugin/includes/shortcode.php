@@ -47,32 +47,7 @@ add_shortcode('wz_quiz', function($atts){
                 ⏱ Time Limit: 
                 <strong>
                     <?php 
-                        $time = intval($quiz->time_limit);
-
-                        if ($time === 0) {
-                            echo "Unlimited";
-                        } else {
-
-                            $h = floor($time / 3600);
-                            $m = floor(($time % 3600) / 60);
-                            $s = $time % 60;
-
-                            $parts = [];
-
-                            if ($h > 0) {
-                                $parts[] = $h . " hr" . ($h > 1 ? "s" : "");
-                            }
-
-                            if ($m > 0) {
-                                $parts[] = $m . " min" . ($m > 1 ? "s" : "");
-                            }
-
-                            if ($s > 0) {
-                                $parts[] = $s . " sec";
-                            }
-
-                            echo implode(" ", $parts);
-                        }
+                        echo wzq_format_time($quiz->time_limit);
                     ?>
                 </strong>
             </div>

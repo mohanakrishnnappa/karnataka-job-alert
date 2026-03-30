@@ -142,18 +142,7 @@ function wzq_render_quiz_card($post_id) {
     $question_count = $quiz->total_questions ?? 0;
 
     // ⏱ Time format
-    $time_label = "Unlimited";
-
-    if (!empty($quiz->time_limit)) {
-        $m = floor($quiz->time_limit / 60);
-        $s = $quiz->time_limit % 60;
-
-        if ($m > 0) {
-            $time_label = $m . " min";
-        } elseif ($s > 0) {
-            $time_label = $s . " sec";
-        }
-    }
+    $time_label = wzq_format_time($quiz->time_limit);
 
     ob_start();
     ?>

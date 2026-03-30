@@ -91,3 +91,33 @@ function wzq_create_tables() {
     dbDelta($sql2);
     dbDelta($sql3);
 }
+
+// Seconds to Minutes or Hours
+function wzq_format_time($seconds) {
+
+    $seconds = intval($seconds);
+
+    if ($seconds <= 0) {
+        return "Unlimited";
+    }
+
+    $h = floor($seconds / 3600);
+    $m = floor(($seconds % 3600) / 60);
+    $s = $seconds % 60;
+
+    $parts = [];
+
+    if ($h > 0) {
+        $parts[] = $h . " hr" . ($h > 1 ? "s" : "");
+    }
+
+    if ($m > 0) {
+        $parts[] = $m . " min" . ($m > 1 ? "s" : "");
+    }
+
+    if ($s > 0) {
+        $parts[] = $s . " sec";
+    }
+
+    return implode(" ", $parts);
+}

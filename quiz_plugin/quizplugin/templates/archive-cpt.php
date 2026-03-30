@@ -235,15 +235,8 @@ div.wzq-fullwidth {
             $question_count = $quiz->total_questions ?? 0;
 
             // Format time
-            $time_label = "Unlimited";
-
-            if (!empty($quiz->time_limit)) {
-                $m = floor($quiz->time_limit / 60);
-                $s = $quiz->time_limit % 60;
-
-                if ($m > 0) $time_label = $m . " min";
-                if ($s > 0 && $m == 0) $time_label = $s . " sec";
-            }
+            $time_label = wzq_format_time($quiz->time_limit);
+            
             ?>
 
             <div class="wzq-card">
