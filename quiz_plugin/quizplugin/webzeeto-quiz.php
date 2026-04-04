@@ -25,8 +25,10 @@ add_action('wp_enqueue_scripts', function() {
 
     wp_enqueue_style('wzq-css', WZQ_URL . 'assets/css/quiz.css');
 
-    // ✅ QUIZ PAGE
-    if (is_singular('wz_quiz')) {
+    global $post;
+
+    // ✅ LOAD if shortcode exists
+    if (is_singular('wz_quiz') ||(isset($post->post_content) && has_shortcode($post->post_content, 'wz_quiz'))) {
 
         wp_enqueue_script('wzq-js', WZQ_URL . 'assets/js/quiz.js', [], null, true);
 
