@@ -5,104 +5,125 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>FAQ Section</title>
         <style>
-    body {
-        margin: 0;
-        font-family: 'Segoe UI', sans-serif;
-        background: #0d0d0d;
-        color: #fff;
-    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', sans-serif; background: #f9f9f8; color: #1a1a1a; }
 
-    .faq-container {
-        max-width: 700px;
-        margin: 50px auto;
-        padding: 20px;
-    }
+    .faq-wrap { max-width: 680px; margin: 60px auto; padding: 0 20px; }
+    .faq-head { font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: #888; margin-bottom: 8px; }
+    .faq-title { font-size: 28px; font-weight: 500; margin-bottom: 2rem; }
 
-    .faq-item {
-        background: #1a1a1a;
-        margin-bottom: 15px;
-        border-radius: 12px;
-        overflow: hidden;
-        transition: 0.3s ease;
-        border: 1px solid #2a2a2a;
-    }
+    .faq-item { border: 1px solid #e5e5e3; border-radius: 12px; margin-bottom: 10px; background: #fff; overflow: hidden; transition: border-color 0.2s; }
+    .faq-item:hover { border-color: #c0c0bc; }
+    .faq-item.open { border-color: #b0b0ac; }
 
-    .faq-question {
-        padding: 18px 20px;
-        cursor: pointer;
-        font-size: 18px;
-        font-weight: 600;
-        position: relative;
-    }
+    .faq-q { display: flex; align-items: center; justify-content: space-between; padding: 18px 20px; cursor: pointer; gap: 16px; }
+    .faq-q-inner { display: flex; align-items: center; gap: 10px; }
+    .num-badge { width: 22px; height: 22px; border-radius: 50%; background: #f1f0ec; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; color: #888; flex-shrink: 0; }
+    .faq-q-text { font-size: 15px; font-weight: 500; }
 
-    .faq-question::after {
-        content: "+";
-        position: absolute;
-        right: 20px;
-        font-size: 22px;
-        transition: 0.3s;
-    }
+    .faq-icon { width: 26px; height: 26px; border-radius: 50%; border: 1px solid #ddd; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background 0.2s; }
+    .faq-icon svg { width: 12px; height: 12px; stroke: #666; stroke-width: 1.5; stroke-linecap: round; transition: transform 0.3s cubic-bezier(0.4,0,0.2,1); }
+    .faq-item.open .faq-icon svg { transform: rotate(45deg); }
 
-    .faq-item.active .faq-question::after {
-        content: "–";
-    }
-
-    .faq-answer {
-        max-height: 0;
-        overflow: hidden;
-        padding: 0 20px;
-        font-size: 16px;
-        line-height: 1.6;
-        color: #00ffd5;
-        transition: max-height 0.4s ease, padding 0.3s ease;
-    }
-
-    .faq-item.active .faq-answer {
-        max-height: 200px;
-        padding: 15px 20px 20px;
-    }
-
-    /* Hover effect */
-    .faq-item:hover {
-        border-color: #00ffd5;
-        box-shadow: 0 0 10px rgba(0,255,213,0.2);
-    }
+    .faq-a-wrap { max-height: 0; overflow: hidden; transition: max-height 0.35s cubic-bezier(0.4,0,0.2,1); }
+    .faq-item.open .faq-a-wrap { max-height: 300px; }
+    .faq-a { padding: 0 20px 18px; border-top: 1px solid #f0f0ec; padding-top: 14px; font-size: 14px; line-height: 1.7; color: #555; }
         </style>
     </head>
     <body>
-        <div class="faq-container">
+        <div class="faq-wrap">
+            <p class="faq-head">Support</p>
+            <h2 class="faq-title">Frequently asked questions</h2>
             <div class="faq-item">
-                <div class="faq-question">What is this website about?</div>
-                <div class="faq-answer">
-                    This website provides useful content in an interactive way using modern UI components.
+                <div class="faq-q">
+                    <div class="faq-q-inner">
+                        <span class="num-badge">1</span>
+                        <span class="faq-q-text">What is this website about?</span>
+                    </div>
+                    <div class="faq-icon">
+                        <svg viewBox="0 0 12 12" fill="none">
+                            <line
+                                x1="6"
+                                y1="1"
+                                x2="6"
+                                y2="11"
+                            />
+                            <line
+                                x1="1"
+                                y1="6"
+                                x2="11"
+                                y2="6"
+                            />
+                        </svg>
+                    </div>
+                </div>
+                <div class="faq-a-wrap">
+                    <div class="faq-a">This website provides useful content in an interactive way using modern UI components.</div>
                 </div>
             </div>
             <div class="faq-item">
-                <div class="faq-question">How does this FAQ work?</div>
-                <div class="faq-answer">
-                    Click on any question to expand and reveal the answer with a smooth animation.
+                <div class="faq-q">
+                    <div class="faq-q-inner">
+                        <span class="num-badge">2</span>
+                        <span class="faq-q-text">How does this FAQ work?</span>
+                    </div>
+                    <div class="faq-icon">
+                        <svg viewBox="0 0 12 12" fill="none">
+                            <line
+                                x1="6"
+                                y1="1"
+                                x2="6"
+                                y2="11"
+                            />
+                            <line
+                                x1="1"
+                                y1="6"
+                                x2="11"
+                                y2="6"
+                            />
+                        </svg>
+                    </div>
+                </div>
+                <div class="faq-a-wrap">
+                    <div class="faq-a">Click on any question to expand and reveal the answer with a smooth animation.</div>
                 </div>
             </div>
             <div class="faq-item">
-                <div class="faq-question">Can I customize colors?</div>
-                <div class="faq-answer">
-                    Yes, you can easily change colors in the CSS section to match your brand.
+                <div class="faq-q">
+                    <div class="faq-q-inner">
+                        <span class="num-badge">3</span>
+                        <span class="faq-q-text">Can I customize colors?</span>
+                    </div>
+                    <div class="faq-icon">
+                        <svg viewBox="0 0 12 12" fill="none">
+                            <line
+                                x1="6"
+                                y1="1"
+                                x2="6"
+                                y2="11"
+                            />
+                            <line
+                                x1="1"
+                                y1="6"
+                                x2="11"
+                                y2="6"
+                            />
+                        </svg>
+                    </div>
+                </div>
+                <div class="faq-a-wrap">
+                    <div class="faq-a">Yes, you can easily change colors in the CSS section to match your brand.</div>
                 </div>
             </div>
         </div>
         <script>
-    const faqItems = document.querySelectorAll(".faq-item");
-
-    faqItems.forEach(item => {
-        item.addEventListener("click", () => {
-
-            // Close others (optional)
-            faqItems.forEach(i => {
-                if(i !== item) i.classList.remove("active");
-            });
-
-            item.classList.toggle("active");
-        });
+    document.querySelectorAll('.faq-q').forEach(q => {
+      q.addEventListener('click', () => {
+        const item = q.closest('.faq-item');
+        const isOpen = item.classList.contains('open');
+        document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+        if (!isOpen) item.classList.add('open');
+      });
     });
         </script>
     </body>
