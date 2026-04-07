@@ -10,9 +10,6 @@ body {
     font-family: "Hubballi", sans-serif;
     background: #f9f9f8;
     color: #1a1a1a;
-    -webkit-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
 }
 
 .faq-wrap {
