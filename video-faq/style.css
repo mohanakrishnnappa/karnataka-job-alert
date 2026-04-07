@@ -113,3 +113,35 @@ body {
     line-height: 1.7;
     color: #555;
 }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* Header */
+table th {
+    background: #2563eb;
+    color: #ffffff;
+    text-align: left;
+    padding: 12px;
+    font-weight: 600;
+}
+
+/* Cells */
+table td {
+    padding: 12px;
+    border-bottom: 1px solid #e5e7eb;
+    color: #111827;
+}
+
+/* Alternate row color */
+table tr:nth-child(even) {
+    background: #f9fafb;
+}
+
+/* Rounded corners */
+table {
+    overflow: hidden;
+    border-radius: 10px;
+}
