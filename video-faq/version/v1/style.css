@@ -1,0 +1,147 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: "Hubballi", sans-serif;
+    background: #f9f9f8;
+    color: #1a1a1a;
+}
+
+.faq-wrap {
+    max-width: 680px;
+    margin: 60px auto;
+    padding: 0 20px;
+}
+
+.faq-head {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #888;
+    margin-bottom: 8px;
+}
+
+.faq-title {
+    font-size: 28px;
+    font-weight: 500;
+    margin-bottom: 2rem;
+}
+
+.faq-item {
+    border: 1px solid #e5e5e3;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    background: #fff;
+    overflow: hidden;
+    transition: border-color 0.2s;
+}
+
+.faq-item:hover {
+    border-color: #c0c0bc;
+}
+
+.faq-item.open {
+    border-color: #b0b0ac;
+}
+
+.faq-q {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 20px;
+    cursor: pointer;
+    gap: 16px;
+}
+
+.faq-q-inner {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.faq-q-text {
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.faq-icon {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    border: 1px solid #ddd;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: background 0.2s;
+}
+
+.faq-icon svg {
+    width: 12px;
+    height: 12px;
+    stroke: #666;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.faq-item.open .faq-icon svg {
+    transform: rotate(45deg);
+}
+
+.faq-a-wrap {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.faq-item.open .faq-a-wrap {
+    max-height: 300px;
+}
+
+.faq-a {
+    padding: 0 20px 18px;
+    border-top: 1px solid #f0f0ec;
+    padding-top: 14px;
+    font-size: 14px;
+    line-height: 1.7;
+    color: #555;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* Header */
+table th {
+    background: #2563eb;
+    color: #ffffff;
+    text-align: left;
+    padding: 12px;
+    font-weight: 600;
+}
+
+/* Cells */
+table td {
+    padding: 12px;
+    border-bottom: 1px solid #e5e7eb;
+    color: #111827;
+}
+
+/* Alternate row color */
+table tr:nth-child(even) {
+    background: #f9fafb;
+}
+
+/* Rounded corners */
+table {
+    overflow: hidden;
+    border-radius: 10px;
+}
