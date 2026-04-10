@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>PUC Result Clone</title>
+        <style>
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f3f3f3;
+}
+
+/* HEADER */
+.header {
+    background: #d88c1f;
+    color: #fff;
+    text-align: center;
+    padding: 18px 10px;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+.header .sub {
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+/* MAIN FORM */
+.container {
+    width: 500px;
+    margin: 40px auto;
+}
+
+label {
+    font-size: 14px;
+    display: block;
+    margin-top: 15px;
+}
+
+input, select {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border: 1px solid #cfcfcf;
+    font-size: 14px;
+    border-radius: 2px;
+}
+
+/* BUTTON */
+button {
+    margin-top: 15px;
+    padding: 6px 14px;
+    background: #e6e6e6;
+    border: 1px solid #999;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #dcdcdc;
+}
+
+/* LOADING */
+.loading {
+    display: none;
+    text-align: center;
+    margin-top: 40px;
+}
+
+.loader {
+    border: 5px solid #ddd;
+    border-top: 5px solid #d88c1f;
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+    animation: spin 1s linear infinite;
+    margin: auto;
+}
+
+@keyframes spin {
+    100% { transform: rotate(360deg); }
+}
+
+/* RESULT */
+.result {
+    display: none;
+    text-align: center;
+    margin-top: 30px;
+}
+
+.result img {
+    width: 400px;
+    max-width: 100%;
+}
+
+/* BACK BUTTON */
+.back-btn, .back-btn:hover {
+    margin-top: 20px;
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+}
+
+/* FOOTER */
+.footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background: #222;
+    color: #ccc;
+    font-size: 12px;
+    padding: 10px;
+    text-align: center;
+}
+        </style>
+    </head>
+    <body>
+        <!-- HEADER -->
+        <div class="header">
+            KARNATAKA SCHOOL EXAMINATION AND ASSESSMENT BOARD
+            <div class="sub">II PUC EXAM-1 RESULT 2026</div>
+        </div>
+        <!-- FORM -->
+        <div class="container" id="formSection">
+            <label>Enter Reg No.</label>
+            <input
+                type="text"
+                id="number"
+                placeholder="Enter Registration Number"
+                maxlength="12"
+            >
+            <label>Select Subject</label>
+            <select id="option">
+                <option value="">Subject Combination</option>
+                <option value="1">Science</option>
+                <option value="2">Arts</option>
+                <option value="3">Commerce</option>
+            </select>
+            <button onclick="submitForm()">Submit</button>
+            <h3>All The Best</h3>
+        </div>
+        <!-- LOADING -->
+        <div class="loading" id="loading">
+            <div class="loader"></div>
+            <p>Processing...</p>
+        </div>
+        <!-- RESULT -->
+        <div class="result" id="result">
+            <img src="https://images.financialexpressdigital.com/2018/03/april-fools-day.jpg" alt="Result">
+            <br>
+            <button class="back-btn" onclick="goBack()">Go Back</button>
+        </div>
+        <!-- FOOTER -->
+        <div class="footer">
+            Disclaimer: This is Demo UI Website, Neither NIC nor KARNATAKA SCHOOL EXAMINATION AND ASSESSMENT BOARD is responsible for errors.
+        </div>
+        <script>
+function submitForm() {
+    let number = document.getElementById("number").value.trim();
+    let option = document.getElementById("option").value;
+
+    // validation
+    if (number.length !== 12 || isNaN(number)) {
+        alert("Enter valid 12 digit number");
+        return;
+    }
+
+    if (option === "") {
+        alert("Select subject combination");
+        return;
+    }
+
+    // hide form
+    document.getElementById("formSection").style.display = "none";
+
+    // show loading
+    document.getElementById("loading").style.display = "block";
+
+    // simulate processing
+    setTimeout(() => {
+        document.getElementById("loading").style.display = "none";
+        document.getElementById("result").style.display = "block";
+    }, 2000);
+}
+
+function goBack() {
+    document.getElementById("result").style.display = "none";
+    document.getElementById("formSection").style.display = "block";
+
+    // reset
+    document.getElementById("number").value = "";
+    document.getElementById("option").value = "";
+}
+        </script>
+    </body>
+</html>
