@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Kannada Typing Test</title>
+        <style>
+body {
+    font-family: Arial;
+    background: #0f172a;
+    color: #fff;
+    text-align: center;
+    padding: 20px;
+}
+h1 {
+    color: #38bdf8;
+}
+#text {
+    background: #1e293b;
+    padding: 15px;
+    border-radius: 10px;
+    margin: 20px auto;
+    width: 80%;
+    font-size: 20px;
+    line-height: 1.6;
+}
+textarea {
+    width: 80%;
+    height: 120px;
+    margin-top: 20px;
+    padding: 10px;
+    font-size: 18px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+}
+#result {
+    margin-top: 20px;
+    font-size: 20px;
+}
+button {
+    padding: 10px 20px;
+    background: #38bdf8;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 10px;
+    font-size: 16px;
+}
+.correct { color: #22c55e; }
+.wrong { color: #ef4444; }
+        </style>
+    </head>
+    <body>
+        <h1>Kannada Typing Test</h1>
+        <div id="text">
+            ನಮಸ್ಕಾರ ಇದು ಕನ್ನಡ ಟೈಪಿಂಗ್ ಪರೀಕ್ಷೆ. ನೀವು ಇಲ್ಲಿ ಸರಿಯಾಗಿ ಟೈಪ್ ಮಾಡಿ.
+        </div>
+        <textarea id="input" placeholder="Start typing here..."></textarea>
+        <br>
+        <button onclick="resetTest()">Restart</button>
+        <button onclick="endTest()">Finish Test</button>
+        <div id="result"></div>
+        <script>
+
+let startTime = null;
+let endTime = null;
+let timerStarted = false;
+
+const textElement = document.getElementById("text");
+const inputElement = document.getElementById("input");
+const resultElement = document.getElementById("result");
+
+const originalText = textElement.innerText;
+
+// Start timer on first input
+inputElement.addEventListener("input", function () {
+
+    if (!timerStarted) {
+        startTime = new Date().getTime();
+        timerStarted = true;
+    }
+
+    highlightText();
+
+    // Auto complete if exact match
+    if (inputElement.value.trim() === originalText.trim()) {
+        endTest();
+    }
+});
+
+// Highlight correct & wrong characters
+function highlightText() {
+    let typed = inputElement.value;
+    let html = "";
+
+    for (let i = 0; i < originalText.length; i++) {
+        if (typed[i] == null) {
+            html += originalText[i];
+        } else if (typed[i] === originalText[i]) {
+            html += "<span class='correct'>" + originalText[i] + "</span>";
+        } else {
+            html += "<span class='wrong'>" + originalText[i] + "</span>";
+        }
+    }
+
+    textElement.innerHTML = html;
+}
+
+// Finish test manually
+function endTest() {
+    if (!timerStarted) return;
+
+    endTime = new Date().getTime();
+    calculateResult();
+    timerStarted = false;
+}
+
+// Reset test
+function resetTest() {
+    inputElement.value = "";
+    resultElement.innerHTML = "";
+    textElement.innerText = originalText;
+    startTime = null;
+    endTime = null;
+    timerStarted = false;
+}
+
+// Calculate result
+function calculateResult() {
+    let typed = inputElement.value;
+
+    let timeTaken = (endTime - startTime) / 1000;
+
+    // Standard WPM formula
+    let chars = typed.length;
+    let wpm = Math.round(((chars / 5) / timeTaken) * 60);
+
+    // Accuracy
+    let correctChars = 0;
+    for (let i = 0; i < originalText.length; i++) {
+        if (typed[i] === originalText[i]) {
+            correctChars++;
+        }
+    }
+
+    let accuracy = Math.round((correctChars / originalText.length) * 100);
+
+    resultElement.innerHTML =
+        "⏱ Time: " + timeTaken.toFixed(2) + " sec <br>" +
+        "⚡ Speed: " + wpm + " WPM <br>" +
+        "🎯 Accuracy: " + accuracy + "%";
+}
+        </script>
+    </body>
+</html>
